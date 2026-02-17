@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+alembic
+supabase>=2.28.0
+python-multipart>=0.0.20
+slowapi
+pip-audit
+pydantic-settings
+python-jose[cryptography]
+email-validator
