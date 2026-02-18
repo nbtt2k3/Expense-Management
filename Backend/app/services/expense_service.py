@@ -10,10 +10,10 @@ from app.models.expense import Expense
 class ExpenseService:
     def _apply_filters(self, query, start_date, end_date, category_id, search):
         if start_date:
-            query = query.where(Expense.created_at >= start_date)
+            query = query.where(Expense.date >= start_date)
         
         if end_date:
-            query = query.where(Expense.created_at <= end_date)
+            query = query.where(Expense.date <= end_date)
             
         if category_id:
             query = query.where(Expense.category_id == category_id)
@@ -45,9 +45,9 @@ class ExpenseService:
         elif sort == "amount_desc":
             query = query.order_by(desc(Expense.amount))
         elif sort == "date_asc":
-            query = query.order_by(asc(Expense.created_at))
+            query = query.order_by(asc(Expense.date))
         else: # default date_desc
-            query = query.order_by(desc(Expense.created_at))
+            query = query.order_by(desc(Expense.date))
 
         # Count total
         count_query = select(func.count()).select_from(query.subquery())
@@ -88,7 +88,7 @@ class ExpenseService:
         query = self._apply_filters(query, start_date, end_date, category_id, search)
         
         # Order by date desc
-        query = query.order_by(desc(Expense.created_at))
+        query = query.order_by(desc(Expense.date))
         
         result = await db.execute(query)
         expenses = result.scalars().all()
@@ -105,7 +105,7 @@ class ExpenseService:
         
         for expense in expenses:
             writer.writerow([
-                expense.created_at.strftime("%Y-%m-%d"),
+                expense.date.strftime("%Y-%m-%d"),
                 expense.category.name,
                 f"{expense.amount:.2f}",
                 expense.description or "",
@@ -129,7 +129,7 @@ class ExpenseService:
         ).join(Expense).where(
             Expense.user_id == user_id,
             Expense.is_deleted == False,
-            Expense.created_at >= start_of_year
+            Expense.date >= start_of_year
         ).group_by(Category.name)
         
         cat_result = await db.execute(cat_query)
@@ -147,23 +147,44 @@ class ExpenseService:
             })
             
         # 2. Monthly Trend (Last 6 Months or Current Year)
-        # We'll do Current Year for simplicity
-        
-        # Postgres date_trunc
-        trend_query = select(
-            func.to_char(Expense.created_at, 'YYYY-MM').label("month"),
+        from app.models.income import Income
+
+        # 2. Monthly Trend (Income vs Expense)
+        # Expense Trend
+        expense_trend_query = select(
+            func.to_char(Expense.date, 'YYYY-MM').label("month"),
             func.sum(Expense.amount).label("total")
         ).where(
             Expense.user_id == user_id,
             Expense.is_deleted == False,
-            Expense.created_at >= start_of_year
+            Expense.date >= start_of_year
         ).group_by("month").order_by("month")
         
-        trend_result = await db.execute(trend_query)
-        monthly_trend = [
-            {"month": row.month, "total_amount": row.total}
-            for row in trend_result
-        ]
+        expense_trend_result = await db.execute(expense_trend_query)
+        expense_map = {row.month: row.total for row in expense_trend_result}
+        
+        # Income Trend
+        income_trend_query = select(
+            func.to_char(Income.date, 'YYYY-MM').label("month"),
+            func.sum(Income.amount).label("total")
+        ).where(
+            Income.user_id == user_id,
+            Income.date >= start_of_year
+        ).group_by("month").order_by("month")
+        
+        income_trend_result = await db.execute(income_trend_query)
+        income_map = {row.month: row.total for row in income_trend_result}
+        
+        # Merge
+        all_months = sorted(list(set(list(expense_map.keys()) + list(income_map.keys()))))
+        
+        monthly_trend = []
+        for month in all_months:
+            monthly_trend.append({
+                "month": month,
+                "expense": expense_map.get(month, 0),
+                "income": income_map.get(month, 0)
+            })
         
         return {
             "category_breakdown": category_breakdown,
@@ -182,7 +203,7 @@ class ExpenseService:
         async def get_total(start_date):
             query = select(func.sum(Expense.amount)).where(
                 Expense.user_id == user_id,
-                Expense.created_at >= start_date,
+                Expense.date >= start_date,
                 Expense.is_deleted == False
             )
             result = await db.execute(query)
@@ -200,7 +221,7 @@ class ExpenseService:
             func.sum(Expense.amount).label("total")
         ).join(Category).where(
             Expense.user_id == user_id,
-            Expense.created_at >= start_of_month,
+            Expense.date >= start_of_month,
             Expense.is_deleted == False
         ).group_by(Expense.category_id, Category.name)
         
@@ -213,11 +234,11 @@ class ExpenseService:
         # 3. Daily Spending (Current Month)
         # Note: truncating to day might depend on DB dialect, assuming accessible here or simplified
         daily_query = select(
-            func.date_trunc('day', Expense.created_at).label("date"),
+            func.date_trunc('day', Expense.date).label("date"),
             func.sum(Expense.amount).label("total")
         ).where(
             Expense.user_id == user_id,
-            Expense.created_at >= start_of_month,
+            Expense.date >= start_of_month,
             Expense.is_deleted == False
         ).group_by("date").order_by("date")
 

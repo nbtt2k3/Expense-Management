@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 
 class CategoryBase(BaseModel):
     name: str
+    type: str = "expense" # Default to expense, but should be validated
 
 class CategoryCreate(CategoryBase):
     pass
@@ -10,5 +11,4 @@ class CategoryCreate(CategoryBase):
 class CategoryResponse(CategoryBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

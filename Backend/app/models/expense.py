@@ -14,6 +14,7 @@ class Expense(Base):
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False, index=True)
     description = Column(String, nullable=True)
     is_deleted = Column(Boolean, default=False, nullable=False, index=True)
+    date = Column(DateTime(timezone=True), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
 
     user = relationship("User", back_populates="expenses")

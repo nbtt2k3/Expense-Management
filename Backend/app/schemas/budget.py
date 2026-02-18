@@ -1,6 +1,6 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, ConfigDict
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Any
 
 class BudgetBase(BaseModel):
     amount: Decimal
@@ -20,13 +20,20 @@ class BudgetBase(BaseModel):
         return v
 
 class BudgetCreate(BudgetBase):
-    pass
+    category_id: Optional[int] = None
 
 class BudgetResponse(BudgetBase):
-    pass
+    id: int
+    user_id: Any
+    category_id: Optional[int] = None
+    
+    model_config = ConfigDict(from_attributes=True)
 
 class BudgetStatusResponse(BaseModel):
+    category_id: Optional[int] = None
+    category_name: Optional[str] = "Global"
     budget: Decimal
     spent: Decimal
     remaining: Decimal
     percent_used: float
+

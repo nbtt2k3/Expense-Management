@@ -1,0 +1,102 @@
+============================= test session starts =============================
+platform win32 -- Python 3.10.6, pytest-9.0.2, pluggy-1.6.0
+rootdir: D:\Antigravity Projects\Expense-Management\backend
+plugins: anyio-4.10.0, asyncio-1.3.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 3 items
+
+tests\test_expenses.py EE
+Tables: ['users', 'categories', 'expenses', 'budgets', 'incomes']
+.
+
+=================================== ERRORS ====================================
+____________________ ERROR at setup of test_create_expense ____________________
+
+self = <Coroutine test_create_expense>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+
+D:\laragon\bin\python\python-3.10\lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+fixturedef = <FixtureDef argname='auth_headers' scope='function' baseid='tests/test_expenses.py'>
+request = <SubRequest 'auth_headers' for <Coroutine test_create_expense>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+E               pytest.PytestRemovedIn9Warning: 'test_create_expense' requested an async fixture 'auth_headers', with no plugin or hook that handled it. This is usually an error, as pytest does not natively support it. This will turn into an error in pytest 9.
+E               See: https://docs.pytest.org/en/stable/deprecations.html#sync-test-depending-on-async-fixture
+
+D:\laragon\bin\python\python-3.10\lib\site-packages\pytest_asyncio\plugin.py:728: PytestRemovedIn9Warning
+_____________________ ERROR at setup of test_get_expenses _____________________
+
+self = <Coroutine test_get_expenses>
+
+    def setup(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        if runner_fixture_id not in self.fixturenames:
+            self.fixturenames.append(runner_fixture_id)
+>       return super().setup()
+
+D:\laragon\bin\python\python-3.10\lib\site-packages\pytest_asyncio\plugin.py:458: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+fixturedef = <FixtureDef argname='auth_headers' scope='function' baseid='tests/test_expenses.py'>
+request = <SubRequest 'auth_headers' for <Coroutine test_get_expenses>>
+
+    @pytest.hookimpl(wrapper=True)
+    def pytest_fixture_setup(fixturedef: FixtureDef, request) -> object | None:
+        asyncio_mode = _get_asyncio_mode(request.config)
+        if not _is_asyncio_fixture_function(fixturedef.func):
+            if asyncio_mode == Mode.STRICT:
+                # Ignore async fixtures without explicit asyncio mark in strict mode
+                # This applies to pytest_trio fixtures, for example
+>               return (yield)
+E               pytest.PytestRemovedIn9Warning: 'test_get_expenses' requested an async fixture 'auth_headers', with no plugin or hook that handled it. This is usually an error, as pytest does not natively support it. This will turn into an error in pytest 9.
+E               See: https://docs.pytest.org/en/stable/deprecations.html#sync-test-depending-on-async-fixture
+
+D:\laragon\bin\python\python-3.10\lib\site-packages\pytest_asyncio\plugin.py:728: PytestRemovedIn9Warning
+============================== warnings summary ===============================
+app\db\base.py:3
+  D:\Antigravity Projects\Expense-Management\backend\app\db\base.py:3: MovedIn20Warning: The ``declarative_base()`` function is now available as sqlalchemy.orm.declarative_base(). (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+    Base = declarative_base()
+
+app\schemas\user.py:13
+  D:\Antigravity Projects\Expense-Management\backend\app\schemas\user.py:13: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class UserResponse(UserBase):
+
+app\schemas\category.py:11
+  D:\Antigravity Projects\Expense-Management\backend\app\schemas\category.py:11: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class CategoryResponse(CategoryBase):
+
+app\schemas\expense.py:27
+  D:\Antigravity Projects\Expense-Management\backend\app\schemas\expense.py:27: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class ExpenseResponse(ExpenseBase):
+
+app\core\config.py:3
+  D:\Antigravity Projects\Expense-Management\backend\app\core\config.py:3: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class Settings(BaseSettings):
+
+app\routers\expense.py:36
+  D:\Antigravity Projects\Expense-Management\backend\app\routers\expense.py:36: FastAPIDeprecationWarning: `regex` has been deprecated, please use `pattern` instead
+    type: Optional[str] = Query(None, regex="^(income|expense)$"),
+
+app\schemas\budget.py:25
+  D:\Antigravity Projects\Expense-Management\backend\app\schemas\budget.py:25: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class BudgetResponse(BudgetBase):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/test_expenses.py::test_create_expense - pytest.PytestRemovedIn9Wa...
+ERROR tests/test_expenses.py::test_get_expenses - pytest.PytestRemovedIn9Warn...
+=================== 1 passed, 7 warnings, 2 errors in 1.46s ===================

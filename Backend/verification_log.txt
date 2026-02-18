@@ -1,0 +1,8 @@
+Connected to DB.
+No expenses found. Skipping backfill check.
+Creating dummy category...
+Inserting new expense with date: 2026-02-08 15:51:21.984649
+Inserted Expense ID: 10eb82fe-58fa-42ac-9336-470562808257
+Stored Date: 2026-02-08 08:51:21.984649+00:00
+PASS: Date stored correctly.
+Test expense deleted.

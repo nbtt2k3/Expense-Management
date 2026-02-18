@@ -53,4 +53,7 @@ class SupabaseService:
     def update_user(self, attributes: dict):
         return self.client.auth.update_user(attributes)
 
+    def sign_out(self, access_token: str):
+        return self.client.auth.sign_out(access_token)
+
 supabase_service = SupabaseService()

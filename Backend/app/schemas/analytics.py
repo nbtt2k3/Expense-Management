@@ -9,7 +9,8 @@ class CategoryBreakdownItem(BaseModel):
 
 class MonthlyTrendItem(BaseModel):
     month: str # "2024-01"
-    total_amount: Decimal
+    expense: Decimal
+    income: Decimal
 
 class AnalyticsResponse(BaseModel):
     category_breakdown: List[CategoryBreakdownItem]

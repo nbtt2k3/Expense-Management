@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from sqlalchemy.future import select
 from sqlalchemy import func
 from datetime import datetime
@@ -20,14 +22,19 @@ async def create_or_update_budget(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Check if budget exists for this month/year
-    result = await db.execute(
-        select(Budget).where(
-            Budget.user_id == current_user.id,
-            Budget.month == budget_in.month,
-            Budget.year == budget_in.year
-        )
+    # Check if budget exists for this month/year/category
+    query = select(Budget).where(
+        Budget.user_id == current_user.id,
+        Budget.month == budget_in.month,
+        Budget.year == budget_in.year
     )
+    
+    if budget_in.category_id:
+        query = query.where(Budget.category_id == budget_in.category_id)
+    else:
+        query = query.where(Budget.category_id.is_(None))
+
+    result = await db.execute(query)
     existing_budget = result.scalars().first()
 
     if existing_budget:
@@ -40,59 +47,83 @@ async def create_or_update_budget(
             user_id=current_user.id,
             amount=budget_in.amount,
             month=budget_in.month,
-            year=budget_in.year
+            year=budget_in.year,
+            category_id=budget_in.category_id
         )
         db.add(new_budget)
         await db.commit()
         await db.refresh(new_budget)
         return new_budget
 
-@router.get("/current", response_model=BudgetStatusResponse)
-async def get_current_budget_status(
+@router.get("/progress", response_model=List[BudgetStatusResponse])
+async def get_budget_progress(
+    month: Optional[int] = None,
+    year: Optional[int] = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    today = datetime.now()
-    current_month = today.month
-    current_year = today.year
-
-    # Get Budget
-    result = await db.execute(
-        select(Budget).where(
-            Budget.user_id == current_user.id,
-            Budget.month == current_month,
-            Budget.year == current_year
-        )
-    )
-    budget = result.scalars().first()
-
-    if not budget:
-        # No budget set for this month
-        return {
-            "budget": 0,
-            "spent": 0,
-            "remaining": 0,
-            "percent_used": 0
-        }
-
-    # Calculate Spent
-    start_of_month = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    now = datetime.now()
+    target_month = month or now.month
+    target_year = year or now.year
     
-    # Simple sum aggregation
-    spent_query = select(func.sum(Expense.amount)).where(
-        Expense.user_id == current_user.id,
-        Expense.created_at >= start_of_month,
-        Expense.is_deleted == False
+    start_date = datetime(target_year, target_month, 1)
+    if target_month == 12:
+        end_date = datetime(target_year + 1, 1, 1)
+    else:
+        end_date = datetime(target_year, target_month + 1, 1)
+
+    # 1. Get all budgets for the month
+    # We join with Category to get names
+    budgets_query = select(Budget).options(
+            selectinload(Budget.category)
+        ).where(
+        Budget.user_id == current_user.id,
+        Budget.month == target_month,
+        Budget.year == target_year
     )
-    spent_result = await db.execute(spent_query)
-    spent = spent_result.scalar() or Decimal(0)
+    budgets_result = await db.execute(budgets_query)
+    budgets = budgets_result.scalars().all()
 
-    remaining = budget.amount - spent
-    percent_used = (spent / budget.amount) * 100 if budget.amount > 0 else 0
-
-    return {
-        "budget": budget.amount,
-        "spent": spent,
-        "remaining": remaining,
-        "percent_used": round(percent_used, 2)
-    }
+    # 2. Get expenses aggregated by category
+    # Global expenses (no category or any category if we want total spend? 
+    # Usually "Global Budget" means "Total Budget". 
+    # "Category Budget" means "Limit for that category".
+    
+    # Strategy:
+    # For each budget:
+    #   if budget.category_id:
+    #       sum expenses with that category_id
+    #   else (Global):
+    #       sum ALL expenses
+    
+    response = []
+    
+    for budget in budgets:
+        spent_query = select(func.sum(Expense.amount)).where(
+            Expense.user_id == current_user.id,
+            Expense.date >= start_date,
+            Expense.date < end_date,
+            Expense.is_deleted == False
+        )
+        
+        category_name = "Global"
+        
+        if budget.category_id:
+            spent_query = spent_query.where(Expense.category_id == budget.category_id)
+            category_name = budget.category.name if budget.category else "Unknown"
+        
+        spent_result = await db.execute(spent_query)
+        spent = spent_result.scalar() or Decimal(0)
+        
+        percent_used = (float(spent) / float(budget.amount)) * 100 if budget.amount > 0 else 0
+        
+        response.append(BudgetStatusResponse(
+            category_id=budget.category_id,
+            category_name=category_name,
+            budget=budget.amount,
+            spent=spent,
+            remaining=budget.amount - spent,
+            percent_used=round(percent_used, 2)
+        ))
+        
+    return response

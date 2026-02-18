@@ -79,6 +79,14 @@ async def login(request: Request, user: UserLogin):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@router.post("/logout", status_code=status.HTTP_200_OK)
+async def logout(token: str = Depends(supabase_service.oauth2_scheme)):
+    try:
+        supabase_service.sign_out(token)
+        return {"message": "Logged out successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @router.post("/refresh", response_model=Token)
 async def refresh_token(data: TokenRefresh):
     try:

@@ -8,9 +8,11 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    type = Column(String, default="expense", nullable=False) # 'income' or 'expense'
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
 
     expenses = relationship("Expense", back_populates="category")
+    user = relationship("User", back_populates="categories")
 
     __table_args__ = (
         UniqueConstraint("name", "user_id", name="uq_category_name_user"),

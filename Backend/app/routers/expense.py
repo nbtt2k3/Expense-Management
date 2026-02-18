@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import datetime
@@ -25,7 +25,7 @@ async def create_category(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    new_category = Category(name=category.name, user_id=current_user.id)
+    new_category = Category(name=category.name, type=category.type, user_id=current_user.id)
     db.add(new_category)
     await db.commit()
     await db.refresh(new_category)
@@ -33,10 +33,14 @@ async def create_category(
 
 @router.get("/categories", response_model=List[CategoryResponse])
 async def get_categories(
+    type: Optional[str] = Query(None, pattern="^(income|expense)$"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    result = await db.execute(select(Category).where(Category.user_id == current_user.id))
+    query = select(Category).where(Category.user_id == current_user.id)
+    if type:
+        query = query.where(Category.type == type)
+    result = await db.execute(query)
     return result.scalars().all()
 
 @router.get("/export")
@@ -102,20 +106,72 @@ async def get_dashboard_summary(
 ):
     return await expense_service.get_monthly_summary(db, current_user.id)
 
-@router.post("/", response_model=ExpenseResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_expense(
     expense: ExpenseCreate,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     new_expense = Expense(
-        **expense.dict(),
+        **expense.model_dump(),
         user_id=current_user.id
     )
     db.add(new_expense)
     await db.commit()
     await db.refresh(new_expense)
-    return new_expense
+
+    # --- Budget Alert Check ---
+    budget_warning = None
+    if new_expense.category_id:
+        from sqlalchemy import func
+        from app.models.budget import Budget
+        from decimal import Decimal
+
+        exp_date = new_expense.date or new_expense.created_at
+        target_month = exp_date.month
+        target_year = exp_date.year
+
+        # Find budget for this category + month
+        budget_q = select(Budget).where(
+            Budget.user_id == current_user.id,
+            Budget.category_id == new_expense.category_id,
+            Budget.month == target_month,
+            Budget.year == target_year
+        )
+        budget_result = await db.execute(budget_q)
+        budget = budget_result.scalars().first()
+
+        if budget:
+            # Sum all expenses for this category in this month
+            start_date = datetime(target_year, target_month, 1)
+            if target_month == 12:
+                end_date = datetime(target_year + 1, 1, 1)
+            else:
+                end_date = datetime(target_year, target_month + 1, 1)
+
+            spent_q = select(func.sum(Expense.amount)).where(
+                Expense.user_id == current_user.id,
+                Expense.category_id == new_expense.category_id,
+                Expense.date >= start_date,
+                Expense.date < end_date,
+                Expense.is_deleted == False
+            )
+            spent_result = await db.execute(spent_q)
+            spent = float(spent_result.scalar() or 0)
+            budget_amount = float(budget.amount)
+
+            if budget_amount > 0:
+                percent = round((spent / budget_amount) * 100, 1)
+                if percent >= 100:
+                    budget_warning = f"🚨 Budget exceeded! You've spent {percent}% of your budget."
+                elif percent >= 80:
+                    budget_warning = f"⚠️ Budget warning: You've used {percent}% of your budget."
+
+    # Build response
+    response_data = ExpenseResponse.model_validate(new_expense).model_dump(mode='json')
+    response_data["budget_warning"] = budget_warning
+    from fastapi.responses import JSONResponse
+    return JSONResponse(content=response_data, status_code=201)
 
 @router.put("/{id}", response_model=ExpenseResponse)
 async def update_expense(
@@ -133,11 +189,10 @@ async def update_expense(
     if expense.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Not authorized to update this expense")
 
-    update_data = expense_update.dict(exclude_unset=True)
+    update_data = expense_update.model_dump(exclude_unset=True)
     
     # Map 'date' from schema to 'created_at' in model if present
-    if "date" in update_data:
-        update_data["created_at"] = update_data.pop("date")
+
 
     for key, value in update_data.items():
         setattr(expense, key, value)
