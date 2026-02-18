@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: expense-management-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: BACKEND_CORS_ORIGINS
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.9

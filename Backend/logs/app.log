@@ -1,0 +1,418 @@
+2026-02-17 15:22:29,288 - expense_app - INFO - REQUEST: GET /
+2026-02-17 15:22:29,297 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0090s
+2026-02-17 15:22:30,179 - expense_app - INFO - REQUEST: GET /favicon.ico
+2026-02-17 15:22:30,181 - expense_app - INFO - RESPONSE: GET /favicon.ico Status: 404 Duration: 0.0018s
+2026-02-17 15:22:31,933 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 15:22:31,935 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0020s
+2026-02-17 15:22:33,088 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 15:22:33,107 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0185s
+2026-02-17 15:27:25,429 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 15:27:25,432 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0030s
+2026-02-17 15:27:26,355 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 15:27:26,374 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0189s
+2026-02-17 15:33:18,366 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 15:33:18,367 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0010s
+2026-02-17 15:33:19,417 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 15:33:19,439 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0219s
+2026-02-17 15:57:32,951 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 15:57:32,953 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0030s
+2026-02-17 15:57:34,034 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 15:57:34,074 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0400s
+2026-02-17 16:06:15,555 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:06:15,557 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0025s
+2026-02-17 16:06:18,732 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:06:18,734 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0020s
+2026-02-17 16:06:22,858 - expense_app - INFO - REQUEST: GET /docs/
+2026-02-17 16:06:22,859 - expense_app - INFO - RESPONSE: GET /docs/ Status: 307 Duration: 0.0010s
+2026-02-17 16:06:22,867 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:06:22,868 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0010s
+2026-02-17 16:06:35,314 - expense_app - INFO - REQUEST: GET /
+2026-02-17 16:06:35,318 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0040s
+2026-02-17 16:06:38,366 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:06:38,367 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0013s
+2026-02-17 16:06:41,198 - expense_app - INFO - REQUEST: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-02-17 16:06:41,200 - expense_app - INFO - RESPONSE: GET /.well-known/appspecific/com.chrome.devtools.json Status: 404 Duration: 0.0020s
+2026-02-17 16:06:49,119 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:06:49,120 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0010s
+2026-02-17 16:06:49,148 - expense_app - INFO - REQUEST: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-02-17 16:06:49,150 - expense_app - INFO - RESPONSE: GET /.well-known/appspecific/com.chrome.devtools.json Status: 404 Duration: 0.0020s
+2026-02-17 16:07:40,268 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:07:40,271 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0033s
+2026-02-17 16:07:40,324 - expense_app - INFO - REQUEST: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-02-17 16:07:40,327 - expense_app - INFO - RESPONSE: GET /.well-known/appspecific/com.chrome.devtools.json Status: 404 Duration: 0.0030s
+2026-02-17 16:07:41,614 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 16:07:41,759 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.1444s
+2026-02-17 16:08:54,991 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:08:54,994 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0020s
+2026-02-17 16:08:55,033 - expense_app - INFO - REQUEST: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-02-17 16:08:55,035 - expense_app - INFO - RESPONSE: GET /.well-known/appspecific/com.chrome.devtools.json Status: 404 Duration: 0.0017s
+2026-02-17 16:08:55,996 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 16:08:56,129 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.1327s
+2026-02-17 16:38:02,051 - expense_app - INFO - REQUEST: GET /
+2026-02-17 16:38:02,055 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0050s
+2026-02-17 16:38:05,284 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:38:05,286 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0020s
+2026-02-17 16:38:06,221 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 16:38:06,334 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.1130s
+2026-02-17 16:38:38,182 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 16:38:38,183 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0010s
+2026-02-17 16:38:39,079 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 16:38:39,081 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0020s
+2026-02-17 17:08:27,162 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 17:08:27,164 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0020s
+2026-02-17 17:08:28,142 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 17:08:28,335 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.1929s
+2026-02-17 17:13:13,441 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 17:13:13,444 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0030s
+2026-02-17 17:13:14,324 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 17:13:14,461 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.1372s
+2026-02-17 17:15:38,512 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 17:15:38,513 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0010s
+2026-02-17 17:15:39,412 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 17:15:39,510 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0982s
+2026-02-17 17:18:22,042 - expense_app - INFO - REQUEST: HEAD /expenses/export
+2026-02-17 17:18:22,043 - expense_app - INFO - RESPONSE: HEAD /expenses/export Status: 405 Duration: 0.0010s
+2026-02-17 17:18:40,631 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 17:18:40,633 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0018s
+2026-02-17 17:18:41,538 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 17:18:41,635 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.0975s
+2026-02-17 17:28:56,453 - expense_app - INFO - REQUEST: GET /docs
+2026-02-17 17:28:56,455 - expense_app - INFO - RESPONSE: GET /docs Status: 200 Duration: 0.0020s
+2026-02-17 17:28:57,351 - expense_app - INFO - REQUEST: GET /openapi.json
+2026-02-17 17:28:57,499 - expense_app - INFO - RESPONSE: GET /openapi.json Status: 200 Duration: 0.1484s
+2026-02-18 16:26:41,631 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:26:45,835 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 4.2043s
+2026-02-18 16:26:46,055 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:26:48,689 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.6350s
+2026-02-18 16:26:48,693 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:26:48,694 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0015s
+2026-02-18 16:27:10,631 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:27:13,794 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 3.1631s
+2026-02-18 16:27:14,068 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:27:16,718 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.6503s
+2026-02-18 16:27:16,722 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:27:16,724 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0021s
+2026-02-18 16:27:49,683 - expense_app - INFO - REQUEST: GET /health/
+2026-02-18 16:27:49,683 - expense_app - INFO - RESPONSE: GET /health/ Status: 307 Duration: 0.0006s
+2026-02-18 16:27:50,261 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:27:50,274 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0132s
+2026-02-18 16:27:50,327 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:27:50,333 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0055s
+2026-02-18 16:27:50,334 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:27:50,336 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0020s
+2026-02-18 16:28:11,476 - expense_app - INFO - REQUEST: GET /
+2026-02-18 16:28:11,481 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0053s
+2026-02-18 16:28:41,002 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 16:28:41,008 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0055s
+2026-02-18 16:28:41,036 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:28:44,346 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 3.3100s
+2026-02-18 16:28:45,078 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:28:47,764 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.6867s
+2026-02-18 16:28:47,766 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:28:47,769 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0026s
+2026-02-18 16:29:13,926 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 16:29:13,931 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0044s
+2026-02-18 16:29:13,972 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:29:16,722 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.7501s
+2026-02-18 16:29:17,452 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:29:20,088 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.6360s
+2026-02-18 16:29:20,091 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:29:20,093 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0020s
+2026-02-18 16:29:44,781 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 16:29:44,786 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0041s
+2026-02-18 16:29:44,827 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:29:47,574 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.7474s
+2026-02-18 16:29:48,212 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:29:51,101 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.8894s
+2026-02-18 16:29:51,106 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:29:51,107 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0010s
+2026-02-18 16:30:26,508 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 16:30:26,511 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0037s
+2026-02-18 16:30:26,541 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:30:29,833 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 3.2922s
+2026-02-18 16:30:30,908 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:30:33,586 - expense_app - INFO - RESPONSE: POST /auth/register Status: 400 Duration: 2.6780s
+2026-02-18 16:30:33,592 - expense_app - INFO - REQUEST: POST /auth/token
+2026-02-18 16:30:33,596 - expense_app - INFO - RESPONSE: POST /auth/token Status: 404 Duration: 0.0036s
+2026-02-18 16:33:26,742 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 16:33:26,747 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0058s
+2026-02-18 16:33:26,815 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:33:26,825 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0103s
+2026-02-18 16:33:26,872 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:33:26,878 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0056s
+2026-02-18 16:33:26,881 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:33:26,892 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0113s
+2026-02-18 16:42:37,012 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:42:37,021 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0086s
+2026-02-18 16:42:37,023 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:42:37,046 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0231s
+2026-02-18 16:42:37,048 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:42:37,051 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0030s
+2026-02-18 16:42:37,053 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:42:37,058 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0050s
+2026-02-18 16:43:13,538 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:43:13,548 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0097s
+2026-02-18 16:43:13,550 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:43:13,571 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0203s
+2026-02-18 16:43:13,575 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:43:13,578 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0030s
+2026-02-18 16:43:13,582 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:43:13,587 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0046s
+2026-02-18 16:44:15,939 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:44:15,947 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0080s
+2026-02-18 16:44:15,952 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:44:15,973 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0211s
+2026-02-18 16:44:15,978 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:44:15,981 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0032s
+2026-02-18 16:44:15,982 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:44:15,988 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0062s
+2026-02-18 16:45:01,358 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:45:01,366 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0080s
+2026-02-18 16:45:01,368 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:45:01,389 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0203s
+2026-02-18 16:45:01,394 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:45:01,397 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0035s
+2026-02-18 16:45:01,399 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:45:01,406 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0067s
+2026-02-18 16:45:35,977 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:45:35,988 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0116s
+2026-02-18 16:45:35,993 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:45:36,016 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0229s
+2026-02-18 16:45:36,024 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:45:36,030 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0067s
+2026-02-18 16:45:36,034 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:45:36,049 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0142s
+2026-02-18 16:46:09,324 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:46:09,336 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0116s
+2026-02-18 16:46:09,340 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:46:09,362 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0228s
+2026-02-18 16:46:09,368 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:46:09,373 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0050s
+2026-02-18 16:46:09,375 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:46:09,381 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0066s
+2026-02-18 16:46:39,751 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:46:39,762 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0110s
+2026-02-18 16:46:39,764 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:46:39,790 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0266s
+2026-02-18 16:46:39,797 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:46:39,802 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0050s
+2026-02-18 16:46:39,804 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:46:39,816 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0118s
+2026-02-18 16:48:09,902 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:48:09,911 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0085s
+2026-02-18 16:48:09,913 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:48:09,935 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0214s
+2026-02-18 16:48:09,939 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:48:09,944 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0043s
+2026-02-18 16:48:09,945 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:48:09,954 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0089s
+2026-02-18 16:48:49,242 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 16:48:49,253 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0105s
+2026-02-18 16:48:49,256 - expense_app - INFO - REQUEST: POST /auth/verify-otp
+2026-02-18 16:48:49,280 - expense_app - INFO - RESPONSE: POST /auth/verify-otp Status: 400 Duration: 0.0239s
+2026-02-18 16:48:49,284 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 16:48:49,287 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0035s
+2026-02-18 16:48:49,288 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 16:48:49,297 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 401 Duration: 0.0082s
+2026-02-18 17:06:56,296 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:07:02,501 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 6.2051s
+2026-02-18 17:09:53,519 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:09:59,591 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 6.0722s
+2026-02-18 17:11:04,660 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:11:10,631 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 5.9709s
+2026-02-18 17:14:32,695 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:14:32,699 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0039s
+2026-02-18 17:14:32,726 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:14:32,734 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0081s
+2026-02-18 17:14:32,758 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:14:32,760 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0030s
+2026-02-18 17:14:32,761 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:14:32,764 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0032s
+2026-02-18 17:14:33,070 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:14:33,073 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0032s
+2026-02-18 17:18:11,464 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:18:11,467 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0035s
+2026-02-18 17:18:11,494 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:18:11,501 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0070s
+2026-02-18 17:18:11,528 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:18:11,530 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0025s
+2026-02-18 17:18:11,532 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:18:11,534 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0020s
+2026-02-18 17:18:11,561 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:18:11,577 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0156s
+2026-02-18 17:18:11,779 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:18:11,784 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0050s
+2026-02-18 17:18:11,786 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:18:11,791 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0051s
+2026-02-18 17:18:11,793 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:18:11,800 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0085s
+2026-02-18 17:18:11,801 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-02-18 17:18:11,809 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.0074s
+2026-02-18 17:18:11,837 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:18:11,839 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0020s
+2026-02-18 17:18:11,865 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:18:11,868 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0041s
+2026-02-18 17:18:11,869 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:18:11,873 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0040s
+2026-02-18 17:18:11,902 - expense_app - INFO - REQUEST: GET /expenses/
+2026-02-18 17:18:11,909 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.0073s
+2026-02-18 17:19:41,741 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:19:41,744 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0035s
+2026-02-18 17:19:41,773 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:19:41,779 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0070s
+2026-02-18 17:19:41,804 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:19:41,806 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0020s
+2026-02-18 17:19:41,808 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:19:41,810 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0020s
+2026-02-18 17:19:41,834 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:19:41,846 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0121s
+2026-02-18 17:19:41,871 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:19:41,876 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0050s
+2026-02-18 17:19:41,877 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:19:41,883 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0065s
+2026-02-18 17:19:41,886 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:19:41,894 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0081s
+2026-02-18 17:19:41,896 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-02-18 17:19:41,909 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.0135s
+2026-02-18 17:19:41,939 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:19:41,941 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0020s
+2026-02-18 17:19:41,966 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:19:41,970 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0036s
+2026-02-18 17:19:41,971 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:19:41,975 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0040s
+2026-02-18 17:19:42,003 - expense_app - INFO - REQUEST: GET /expenses/
+2026-02-18 17:19:42,009 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.0057s
+2026-02-18 17:21:39,949 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:21:39,952 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0030s
+2026-02-18 17:21:39,997 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:21:40,006 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0084s
+2026-02-18 17:21:40,061 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:21:40,063 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0029s
+2026-02-18 17:21:40,066 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:21:40,069 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0037s
+2026-02-18 17:21:40,113 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:21:40,126 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0128s
+2026-02-18 17:21:40,163 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:21:40,171 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0077s
+2026-02-18 17:21:40,175 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:21:40,195 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0205s
+2026-02-18 17:21:40,201 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:21:40,219 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0181s
+2026-02-18 17:21:40,222 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-02-18 17:21:40,246 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.0233s
+2026-02-18 17:21:40,355 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:21:40,362 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0066s
+2026-02-18 17:21:40,445 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:21:40,454 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0091s
+2026-02-18 17:21:40,457 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:21:40,466 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0090s
+2026-02-18 17:21:40,539 - expense_app - INFO - REQUEST: GET /expenses/
+2026-02-18 17:21:40,559 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.0204s
+2026-02-18 17:31:55,253 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:31:55,257 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0045s
+2026-02-18 17:31:55,287 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:31:55,297 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0101s
+2026-02-18 17:31:55,329 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:31:55,332 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0025s
+2026-02-18 17:31:55,334 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:31:55,337 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0035s
+2026-02-18 17:31:55,369 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:31:55,379 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0097s
+2026-02-18 17:31:55,410 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:31:55,416 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0060s
+2026-02-18 17:31:55,418 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:31:55,424 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0066s
+2026-02-18 17:31:55,425 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:31:55,433 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0075s
+2026-02-18 17:31:55,435 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-02-18 17:31:55,442 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.0085s
+2026-02-18 17:31:55,471 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:31:55,473 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0020s
+2026-02-18 17:31:55,502 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:31:55,508 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0051s
+2026-02-18 17:31:55,509 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:31:55,514 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0050s
+2026-02-18 17:31:55,544 - expense_app - INFO - REQUEST: GET /expenses/
+2026-02-18 17:31:55,550 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.0062s
+2026-02-18 17:31:55,609 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:31:55,614 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0050s
+2026-02-18 17:31:55,616 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:31:55,625 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 201 Duration: 0.0085s
+2026-02-18 17:31:55,653 - expense_app - INFO - REQUEST: GET /incomes/
+2026-02-18 17:31:55,659 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.0057s
+2026-02-18 17:31:55,688 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:31:55,693 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 201 Duration: 0.0050s
+2026-02-18 17:31:55,775 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:31:55,784 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 422 Duration: 0.0091s
+2026-02-18 17:46:29,412 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:46:29,427 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0157s
+2026-02-18 17:46:29,461 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:46:29,470 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0095s
+2026-02-18 17:46:29,498 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:46:29,502 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0031s
+2026-02-18 17:46:29,502 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:46:29,505 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0031s
+2026-02-18 17:46:29,542 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:46:29,568 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0254s
+2026-02-18 17:46:29,597 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:46:29,604 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0069s
+2026-02-18 17:46:29,606 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:46:29,626 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0203s
+2026-02-18 17:46:29,628 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:46:29,636 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0073s
+2026-02-18 17:46:29,638 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-02-18 17:46:29,646 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.0079s
+2026-02-18 17:46:29,680 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:46:29,696 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0161s
+2026-02-18 17:46:29,727 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:46:29,731 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0047s
+2026-02-18 17:46:29,732 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:46:29,738 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0055s
+2026-02-18 17:46:29,773 - expense_app - INFO - REQUEST: GET /expenses/
+2026-02-18 17:46:29,779 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.0050s
+2026-02-18 17:46:29,838 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:46:29,843 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0055s
+2026-02-18 17:46:29,844 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:46:29,855 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 201 Duration: 0.0108s
+2026-02-18 17:46:29,911 - expense_app - INFO - REQUEST: GET /incomes/
+2026-02-18 17:46:29,920 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.0089s
+2026-02-18 17:46:29,969 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:46:29,974 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 201 Duration: 0.0051s
+2026-02-18 17:46:30,009 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:46:30,011 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 422 Duration: 0.0020s
+2026-02-18 17:54:47,219 - expense_app - INFO - REQUEST: GET /health
+2026-02-18 17:54:47,223 - expense_app - INFO - RESPONSE: GET /health Status: 200 Duration: 0.0040s
+2026-02-18 17:54:47,256 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:54:47,265 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0090s
+2026-02-18 17:54:47,298 - expense_app - INFO - REQUEST: POST /auth/register
+2026-02-18 17:54:47,300 - expense_app - INFO - RESPONSE: POST /auth/register Status: 201 Duration: 0.0020s
+2026-02-18 17:54:47,302 - expense_app - INFO - REQUEST: POST /auth/login
+2026-02-18 17:54:47,304 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.0020s
+2026-02-18 17:54:47,337 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:54:47,348 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0113s
+2026-02-18 17:54:47,381 - expense_app - INFO - REQUEST: POST /budgets/
+2026-02-18 17:54:47,387 - expense_app - INFO - RESPONSE: POST /budgets/ Status: 200 Duration: 0.0063s
+2026-02-18 17:54:47,389 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:54:47,396 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0070s
+2026-02-18 17:54:47,398 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:54:47,414 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0163s
+2026-02-18 17:54:47,416 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-02-18 17:54:47,425 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.0087s
+2026-02-18 17:54:47,461 - expense_app - INFO - REQUEST: GET /
+2026-02-18 17:54:47,463 - expense_app - INFO - RESPONSE: GET / Status: 200 Duration: 0.0020s
+2026-02-18 17:54:47,495 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:54:47,500 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0045s
+2026-02-18 17:54:47,502 - expense_app - INFO - REQUEST: POST /expenses/
+2026-02-18 17:54:47,508 - expense_app - INFO - RESPONSE: POST /expenses/ Status: 201 Duration: 0.0066s
+2026-02-18 17:54:47,540 - expense_app - INFO - REQUEST: GET /expenses/
+2026-02-18 17:54:47,547 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.0065s
+2026-02-18 17:54:47,611 - expense_app - INFO - REQUEST: POST /expenses/categories
+2026-02-18 17:54:47,616 - expense_app - INFO - RESPONSE: POST /expenses/categories Status: 201 Duration: 0.0050s
+2026-02-18 17:54:47,619 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:54:47,628 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 201 Duration: 0.0090s
+2026-02-18 17:54:47,662 - expense_app - INFO - REQUEST: GET /incomes/
+2026-02-18 17:54:47,669 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.0065s
+2026-02-18 17:54:47,704 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:54:47,709 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 201 Duration: 0.0050s
+2026-02-18 17:54:47,743 - expense_app - INFO - REQUEST: POST /incomes/
+2026-02-18 17:54:47,745 - expense_app - INFO - RESPONSE: POST /incomes/ Status: 422 Duration: 0.0020s
