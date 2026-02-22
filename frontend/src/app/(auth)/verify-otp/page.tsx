@@ -19,7 +19,9 @@ import {
 } from '@/components/ui/card';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 
-export default function VerifyOTPPage() {
+import { Suspense } from 'react';
+
+function VerifyOTPContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { t } = useLanguage();
@@ -118,5 +120,22 @@ export default function VerifyOTPPage() {
                 </div>
             </CardFooter>
         </Card>
+    );
+}
+
+export default function VerifyOTPPage() {
+    return (
+        <Suspense fallback={
+            <Card className="w-full">
+                <CardHeader className="space-y-1">
+                    <CardTitle className="text-2xl font-bold text-center">Loading...</CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center py-6">
+                    <Loader2 className="h-8 w-8 animate-spin" />
+                </CardContent>
+            </Card>
+        }>
+            <VerifyOTPContent />
+        </Suspense>
     );
 }
