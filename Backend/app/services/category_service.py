@@ -11,7 +11,7 @@ class CategoryService:
             # Check if exists (idempotency, though user is new)
             result = await db.execute(select(Category).where(Category.name == name, Category.user_id == user_id))
             if not result.scalars().first():
-                new_category = Category(name=name, user_id=user_id)
+                new_category = Category(name=name, user_id=user_id, is_default=True)
                 db.add(new_category)
         
         await db.commit()

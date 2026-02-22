@@ -118,6 +118,7 @@ async def get_budget_progress(
         percent_used = (float(spent) / float(budget.amount)) * 100 if budget.amount > 0 else 0
         
         response.append(BudgetStatusResponse(
+            id=budget.id,
             category_id=budget.category_id,
             category_name=category_name,
             budget=budget.amount,
@@ -127,3 +128,76 @@ async def get_budget_progress(
         ))
         
     return response
+
+@router.put("/{budget_id}", response_model=BudgetResponse)
+async def update_budget(
+    budget_id: int,
+    budget_in: BudgetCreate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    query = select(Budget).where(
+        Budget.id == budget_id,
+        Budget.user_id == current_user.id
+    )
+    result = await db.execute(query)
+    budget = result.scalars().first()
+
+    if not budget:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found or you don't have permission to update it"
+        )
+    
+    # Check if the desired category/month/year already exists for a DIFFERENT budget
+    check_query = select(Budget).where(
+        Budget.user_id == current_user.id,
+        Budget.month == budget_in.month,
+        Budget.year == budget_in.year,
+        Budget.id != budget_id
+    )
+    if budget_in.category_id:
+        check_query = check_query.where(Budget.category_id == budget_in.category_id)
+    else:
+        check_query = check_query.where(Budget.category_id.is_(None))
+        
+    check_result = await db.execute(check_query)
+    existing_conflict = check_result.scalars().first()
+    
+    if existing_conflict:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A budget for this category already exists in the selected month."
+        )
+
+    budget.amount = budget_in.amount
+    budget.category_id = budget_in.category_id
+    budget.month = budget_in.month
+    budget.year = budget_in.year
+
+    await db.commit()
+    await db.refresh(budget)
+    return budget
+
+@router.delete("/{budget_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_budget(
+    budget_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    query = select(Budget).where(
+        Budget.id == budget_id,
+        Budget.user_id == current_user.id
+    )
+    result = await db.execute(query)
+    budget = result.scalars().first()
+
+    if not budget:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found or you don't have permission to delete it"
+        )
+    
+    await db.delete(budget)
+    await db.commit()
+    return None

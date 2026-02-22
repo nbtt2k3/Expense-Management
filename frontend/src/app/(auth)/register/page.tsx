@@ -10,6 +10,8 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import api from '@/lib/api';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -41,6 +43,7 @@ const formSchema = z.object({
 
 export default function RegisterPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -62,11 +65,11 @@ export default function RegisterPage() {
                 full_name: values.full_name,
             });
 
-            toast.success('Account created! Please check your email to verify.');
-            router.push('/login');
+            toast.success(t.auth.registerSuccess);
+            router.push(`/verify-otp?email=${encodeURIComponent(values.email)}&type=signup`);
         } catch (error: any) {
             console.error(error);
-            const message = error.response?.data?.detail || 'Registration failed';
+            const message = error.response?.data?.detail || t.auth.registerFailed;
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -76,9 +79,9 @@ export default function RegisterPage() {
     return (
         <Card className="w-full">
             <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
+                <CardTitle className="text-2xl font-bold text-center">{t.auth.createAccount}</CardTitle>
                 <CardDescription className="text-center">
-                    Enter your information to get started
+                    {t.auth.getStarted}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -89,9 +92,9 @@ export default function RegisterPage() {
                             name="full_name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Full Name</FormLabel>
+                                    <FormLabel>{t.auth.fullName}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="John Doe" {...field} />
+                                        <Input placeholder="John Doe" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -102,9 +105,9 @@ export default function RegisterPage() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                    <FormLabel>{t.auth.email}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="name@example.com" {...field} />
+                                        <Input placeholder="name@example.com" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -115,9 +118,9 @@ export default function RegisterPage() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>{t.auth.password}</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="••••••" {...field} />
+                                        <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -128,9 +131,9 @@ export default function RegisterPage() {
                             name="confirmPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Confirm Password</FormLabel>
+                                    <FormLabel>{t.auth.confirmPassword}</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="••••••" {...field} />
+                                        <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -138,16 +141,16 @@ export default function RegisterPage() {
                         />
                         <Button className="w-full" type="submit" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Sign Up
+                            {t.auth.signUp}
                         </Button>
                     </form>
                 </Form>
             </CardContent>
             <CardFooter className="flex flex-col space-y-2 text-sm text-center text-muted-foreground">
                 <div>
-                    Already have an account?{' '}
+                    {t.auth.hasAccount}{' '}
                     <Link href="/login" className="hover:text-primary underline underline-offset-4">
-                        Sign in
+                        {t.auth.signIn}
                     </Link>
                 </div>
             </CardFooter>

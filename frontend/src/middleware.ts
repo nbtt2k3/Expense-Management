@@ -3,8 +3,10 @@ import type { NextRequest } from 'next/server';
 
 // Routes that require authentication
 const protectedRoutes = ['/dashboard', '/expenses', '/incomes', '/budget', '/analytics', '/settings', '/categories'];
-// Routes that should redirect to dashboard if already logged in
+// Routes that should redirect to dashboard if already logged in (but NOT verify-otp/forgot-password/reset-password)
 const authRoutes = ['/login', '/register'];
+// Public auth routes that should always be accessible
+const publicAuthRoutes = ['/verify-otp', '/forgot-password', '/reset-password'];
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -40,5 +42,8 @@ export const config = {
         '/categories/:path*',
         '/login',
         '/register',
+        '/verify-otp',
+        '/forgot-password',
+        '/reset-password',
     ],
 };

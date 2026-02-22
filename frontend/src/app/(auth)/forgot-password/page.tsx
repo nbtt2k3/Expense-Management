@@ -10,6 +10,8 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import api from '@/lib/api';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
 import {
     Form,
@@ -49,6 +51,7 @@ type Step = 'email' | 'otp' | 'reset' | 'done';
 
 export default function ForgotPasswordPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [step, setStep] = useState<Step>('email');
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState('');
@@ -69,41 +72,38 @@ export default function ForgotPasswordPage() {
         defaultValues: { password: '', confirmPassword: '' },
     });
 
-    // Step 1: Send OTP
     async function onSendOTP(values: z.infer<typeof emailSchema>) {
         setIsLoading(true);
         try {
             await api.post('/auth/forgot-password', { email: values.email });
             setEmail(values.email);
             setStep('otp');
-            toast.success('OTP sent to your email');
+            toast.success(t.auth.otpSentSuccess);
         } catch (error: any) {
-            toast.error(error.response?.data?.detail || 'Failed to send OTP');
+            toast.error(error.response?.data?.detail || t.auth.otpResendFailed);
         } finally {
             setIsLoading(false);
         }
     }
 
-    // Step 2: Verify OTP
     async function onVerifyOTP(values: z.infer<typeof otpSchema>) {
         setIsLoading(true);
         try {
-            const response = await api.post('/auth/verify-reset-otp', {
+            const response = await api.post('/auth/verify-otp', {
                 email,
                 token: values.otp,
-                type: 'email',
+                type: 'reset',
             });
             setResetToken(response.data.access_token);
             setStep('reset');
-            toast.success('OTP verified');
+            toast.success(t.auth.otpVerified);
         } catch (error: any) {
-            toast.error(error.response?.data?.detail || 'Invalid OTP');
+            toast.error(error.response?.data?.detail || t.auth.otpInvalid);
         } finally {
             setIsLoading(false);
         }
     }
 
-    // Step 3: Reset Password
     async function onResetPassword(values: z.infer<typeof resetSchema>) {
         setIsLoading(true);
         try {
@@ -114,9 +114,9 @@ export default function ForgotPasswordPage() {
                 headers: { Authorization: `Bearer ${resetToken}` },
             });
             setStep('done');
-            toast.success('Password reset successfully');
+            toast.success(t.auth.passwordResetSuccess);
         } catch (error: any) {
-            toast.error(error.response?.data?.detail || 'Failed to reset password');
+            toast.error(error.response?.data?.detail || t.auth.registerFailed);
         } finally {
             setIsLoading(false);
         }
@@ -126,13 +126,13 @@ export default function ForgotPasswordPage() {
         <Card className="w-full">
             <CardHeader className="space-y-1">
                 <CardTitle className="text-2xl font-bold text-center">
-                    {step === 'done' ? 'Success!' : 'Reset Password'}
+                    {step === 'done' ? t.auth.success : t.auth.resetPassword}
                 </CardTitle>
                 <CardDescription className="text-center">
-                    {step === 'email' && 'Enter your email to receive a verification code'}
-                    {step === 'otp' && `Enter the 6-digit code sent to ${email}`}
-                    {step === 'reset' && 'Enter your new password'}
-                    {step === 'done' && 'Your password has been reset'}
+                    {step === 'email' && t.auth.enterEmailReset}
+                    {step === 'otp' && `${t.auth.enterCode} ${email}`}
+                    {step === 'reset' && t.auth.enterNewPassword}
+                    {step === 'done' && t.auth.passwordResetDone}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -144,9 +144,9 @@ export default function ForgotPasswordPage() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{t.auth.email}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="name@example.com" {...field} />
+                                            <Input placeholder="name@example.com" {...field} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -154,7 +154,7 @@ export default function ForgotPasswordPage() {
                             />
                             <Button className="w-full" type="submit" disabled={isLoading}>
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Send Code
+                                {t.auth.sendCode}
                             </Button>
                         </form>
                     </Form>
@@ -168,9 +168,9 @@ export default function ForgotPasswordPage() {
                                 name="otp"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Verification Code</FormLabel>
+                                        <FormLabel>{t.auth.verificationCode}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="123456" maxLength={6} {...field} />
+                                            <Input placeholder="123456" maxLength={6} {...field} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -178,7 +178,7 @@ export default function ForgotPasswordPage() {
                             />
                             <Button className="w-full" type="submit" disabled={isLoading}>
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Verify Code
+                                {t.auth.verifyCode}
                             </Button>
                         </form>
                     </Form>
@@ -192,9 +192,9 @@ export default function ForgotPasswordPage() {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>New Password</FormLabel>
+                                        <FormLabel>{t.auth.newPassword}</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="••••••" {...field} />
+                                            <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -205,9 +205,9 @@ export default function ForgotPasswordPage() {
                                 name="confirmPassword"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormLabel>{t.auth.confirmPassword}</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="••••••" {...field} />
+                                            <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -215,7 +215,7 @@ export default function ForgotPasswordPage() {
                             />
                             <Button className="w-full" type="submit" disabled={isLoading}>
                                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                Reset Password
+                                {t.auth.resetPassword}
                             </Button>
                         </form>
                     </Form>
@@ -224,10 +224,10 @@ export default function ForgotPasswordPage() {
                 {step === 'done' && (
                     <div className="text-center space-y-4">
                         <p className="text-sm text-muted-foreground">
-                            You can now sign in with your new password.
+                            {t.auth.canSignIn}
                         </p>
                         <Button className="w-full" onClick={() => router.push('/login')}>
-                            Go to Sign In
+                            {t.auth.goToSignIn}
                         </Button>
                     </div>
                 )}
@@ -235,7 +235,7 @@ export default function ForgotPasswordPage() {
             {step !== 'done' && (
                 <CardFooter className="flex justify-center text-sm text-muted-foreground">
                     <Link href="/login" className="hover:text-primary underline underline-offset-4">
-                        Back to Sign In
+                        {t.auth.backToLogin}
                     </Link>
                 </CardFooter>
             )}

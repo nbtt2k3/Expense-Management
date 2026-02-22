@@ -1,197 +1,312 @@
+import random
+import string
+from datetime import datetime, timedelta, timezone
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.schemas.auth import UserRegister, UserLogin, Token, OTPVerify, TokenRefresh, UserForgotPassword, UserResetPassword, ResendOTP
-from app.services.supabase_service import supabase_service
-from app.core.config import settings
-from app.services.category_service import category_service
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+
 from app.db.session import get_db
 from app.models.user import User
+from app.models.otp import OTPCode
+from app.core.config import settings
+from app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+    get_current_user,
+)
 from app.core.limiter import limiter
-
+from app.services.email_service import send_otp_email
+from app.services.category_service import category_service
+from app.schemas.auth import (
+    UserRegister, UserLogin, Token, OTPVerify,
+    TokenRefresh, UserForgotPassword, UserResetPassword, ResendOTP,
+)
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
+
+def generate_otp() -> str:
+    """Generate a 6-digit OTP code."""
+    return "".join(random.choices(string.digits, k=6))
+
+
+async def create_and_send_otp(
+    db: AsyncSession, user_id, email: str, otp_type: str, purpose: str
+):
+    """Create OTP record and send via email."""
+    code = generate_otp()
+    otp = OTPCode(
+        user_id=user_id,
+        code=code,
+        type=otp_type,
+        expires_at=datetime.now(timezone.utc) + timedelta(minutes=10),
+    )
+    db.add(otp)
+    await db.commit()
+
+    try:
+        send_otp_email(email, code, purpose)
+    except Exception as e:
+        import logging
+        logger = logging.getLogger("expense_app")
+        logger.warning(f"Failed to send OTP email to {email}: {e}. OTP code: {code}")
+
+    return code
+
+
+# ─── Register ───────────────────────────────────────────────────────
+
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 @limiter.limit("5/minute")
-async def register(request: Request, user: UserRegister):
-    try:
-        response = supabase_service.sign_up(user.email, user.password, data={"full_name": user.full_name})
-        # Supabase might return user object even if email confirmation is required.
-        # We don't create user in local DB yet, wait for OTP verification.
-        return {"message": "User registered. Please verify your email with the OTP sent."}
-    except Exception as e:
-         raise HTTPException(status_code=400, detail=str(e))
+async def register(request: Request, user: UserRegister, db: AsyncSession = Depends(get_db)):
+    # Check if email already exists
+    result = await db.execute(select(User).where(User.email == user.email))
+    existing = result.scalars().first()
+    if existing and existing.is_verified:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    if existing and not existing.is_verified:
+        # Re-send OTP for unverified user
+        existing.password_hash = hash_password(user.password)
+        existing.full_name = user.full_name
+        await db.commit()
+        await create_and_send_otp(db, existing.id, user.email, "signup", "verify your account")
+        return {"message": "OTP sent to your email. Please verify to complete registration."}
+
+    # Create new user (unverified)
+    new_user = User(
+        email=user.email,
+        full_name=user.full_name,
+        password_hash=hash_password(user.password),
+        auth_provider="email",
+        is_verified=False,
+    )
+    db.add(new_user)
+    await db.commit()
+    await db.refresh(new_user)
+
+    # Send OTP
+    await create_and_send_otp(db, new_user.id, user.email, "signup", "verify your account")
+
+    return {"message": "OTP sent to your email. Please verify to complete registration."}
+
+
+# ─── Verify OTP ─────────────────────────────────────────────────────
 
 @router.post("/verify-otp")
 @limiter.limit("5/minute")
 async def verify_otp(request: Request, data: OTPVerify, db: AsyncSession = Depends(get_db)):
-    try:
-        response = supabase_service.verify_otp(data.email, data.token, data.type)
-        if response.user:
-            # Check if user exists in local DB
-            result = await db.execute(select(User).where(User.email == data.email))
-            existing_user = result.scalars().first()
-            
-            if not existing_user:
-                new_user = User(
-                    id=response.user.id, # Sync UUID from Supabase
-                    email=response.user.email,
-                    full_name=response.user.user_metadata.get("full_name")
-                )
-                db.add(new_user)
-                await db.commit()
-                await db.refresh(new_user)
-                
-                # Seed default categories
-                await category_service.seed_user_categories(db, new_user.id)
-            
-            return {"message": "OTP verified successfully. You can now login."}
-        else:
-            raise HTTPException(status_code=400, detail="Invalid OTP")
-            
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    # Find user
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    # Find valid OTP
+    otp_result = await db.execute(
+        select(OTPCode)
+        .where(
+            OTPCode.user_id == user.id,
+            OTPCode.code == data.token,
+            OTPCode.type == data.type,
+            OTPCode.used == False,
+            OTPCode.expires_at > datetime.now(timezone.utc),
+        )
+        .order_by(OTPCode.created_at.desc())
+    )
+    otp = otp_result.scalars().first()
+    if not otp:
+        raise HTTPException(status_code=400, detail="Invalid or expired OTP")
+
+    # Mark OTP as used
+    otp.used = True
+
+    # Activate user if signup
+    if data.type == "signup":
+        user.is_verified = True
+        await db.commit()
+
+        # Seed default categories
+        await category_service.seed_user_categories(db, user.id)
+
+        return {"message": "Account verified successfully. You can now login."}
+
+    # For reset type, return tokens so user can reset password
+    if data.type == "reset":
+        await db.commit()
+        access_token = create_access_token(data={"sub": user.email})
+        refresh_token = create_refresh_token(data={"sub": user.email})
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "refresh_token": refresh_token,
+        }
+
+    await db.commit()
+    return {"message": "OTP verified successfully."}
+
+
+# ─── Logout ──────────────────────────────────────────────────────────
+
+@router.post("/logout")
+async def logout():
+    """Logout — stateless JWT, so just acknowledge. Frontend clears tokens."""
+    return {"message": "Logged out successfully"}
+
+
+# ─── Resend OTP ─────────────────────────────────────────────────────
 
 @router.post("/resend-otp")
-async def resend_otp(data: ResendOTP):
-    try:
-        response = supabase_service.resend_otp(data.email, data.type)
-        return {"message": "OTP resent successfully. Check your email."}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+@limiter.limit("3/minute")
+async def resend_otp(request: Request, data: ResendOTP, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found")
 
-# ... (existing imports)
+    purpose = "verify your account" if data.type == "signup" else "reset your password"
+    await create_and_send_otp(db, user.id, data.email, data.type, purpose)
+    return {"message": "OTP resent successfully. Check your email."}
+
+
+# ─── Login ───────────────────────────────────────────────────────────
 
 @router.post("/login", response_model=Token)
 @limiter.limit("10/minute")
-async def login(request: Request, user: UserLogin):
-    try:
-        response = supabase_service.sign_in(user.email, user.password)
-        if response.session:
-            return {
-                "access_token": response.session.access_token,
-                "token_type": "bearer",
-                "refresh_token": response.session.refresh_token
-            }
-        else:
-             raise HTTPException(status_code=401, detail="Login failed")
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+async def login(request: Request, user: UserLogin, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.email == user.email))
+    db_user = result.scalars().first()
 
-@router.post("/logout", status_code=status.HTTP_200_OK)
-async def logout(token: str = Depends(supabase_service.oauth2_scheme)):
-    try:
-        supabase_service.sign_out(token)
-        return {"message": "Logged out successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    if not db_user or not db_user.password_hash:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    if not db_user.is_verified:
+        raise HTTPException(status_code=403, detail="Please verify your email first")
+
+    if not verify_password(user.password, db_user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    access_token = create_access_token(data={"sub": db_user.email})
+    refresh_token = create_refresh_token(data={"sub": db_user.email})
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "refresh_token": refresh_token,
+    }
+
+
+# ─── Refresh Token ───────────────────────────────────────────────────
 
 @router.post("/refresh", response_model=Token)
 async def refresh_token(data: TokenRefresh):
-    try:
-        response = supabase_service.refresh_session(data.refresh_token)
-        if response.session:
-             return {
-                "access_token": response.session.access_token,
-                "token_type": "bearer",
-                "refresh_token": response.session.refresh_token
-            }
-        else:
-            raise HTTPException(status_code=401, detail="Invalid refresh token")
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    payload = decode_token(data.refresh_token)
+    if payload.get("type") != "refresh":
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+
+    email = payload.get("sub")
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+
+    new_access = create_access_token(data={"sub": email})
+    new_refresh = create_refresh_token(data={"sub": email})
+
+    return {
+        "access_token": new_access,
+        "token_type": "bearer",
+        "refresh_token": new_refresh,
+    }
+
+
+# ─── Forgot Password ─────────────────────────────────────────────────
 
 @router.post("/forgot-password", status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
-async def forgot_password(request: Request, data: UserForgotPassword):
-    try:
-        # Step 1: Send OTP to email
-        # We use sign_in_with_otp but functionality is effectively "Check email to login/reset"
-        supabase_service.sign_in_with_otp(data.email)
-        return {"message": "OTP sent to your email. Please verify to reset password."}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+async def forgot_password(request: Request, data: UserForgotPassword, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalars().first()
 
-@router.post("/verify-reset-otp", response_model=Token)
-@limiter.limit("5/minute")
-async def verify_reset_otp(request: Request, data: OTPVerify):
-    try:
-        # Step 2: Verify OTP
-        # type="email" or "magiclink" depending on how sign_in_with_otp is configured. 
-        # Usually "email" for 6-digit code with sign_in_with_otp.
-        # Note: We reuse OTPVerify schema but might need to ensure 'type' is correct.
-        # For sign_in_with_otp, the type is typically 'email' or 'sms'. 
-        
-        # We explicitly use 'email' or 'magiclink' based on data.type (default signup) or override.
-        # Here we force type to 'email' or 'magiclink' if not provided correctly, but let's trust client or default to 'email' if generic.
-        # Actually verify_otp in service passes `data.type`. 
-        # If user sends type="signup", it might fail for login OTP.
-        # Let's override or use a specific flow.
-        
-        # NOTE: For password reset via OTP, we often treat it as a "Login" then "Update Password".
-        response = supabase_service.verify_otp(data.email, data.token, type="email") 
-        
-        if response.session:
-             return {
-                "access_token": response.session.access_token,
-                "token_type": "bearer",
-                "refresh_token": response.session.refresh_token
-            }
-        else:
-            raise HTTPException(status_code=400, detail="Invalid OTP or expired")
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    # Always return success to prevent email enumeration
+    if not user:
+        return {"message": "If that email exists, an OTP has been sent."}
+
+    await create_and_send_otp(db, user.id, data.email, "reset", "reset your password")
+    return {"message": "If that email exists, an OTP has been sent."}
+
+
+# ─── Reset Password ──────────────────────────────────────────────────
 
 @router.post("/reset-password", status_code=status.HTTP_200_OK)
-async def reset_password(data: UserResetPassword, user_id: str = Depends(supabase_service.get_user)):
-    # Step 3: Update Password (Authenticated)
+async def reset_password(
+    data: UserResetPassword,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     if data.password != data.confirm_password:
         raise HTTPException(status_code=400, detail="Passwords do not match")
-        
-    try:
-        supabase_service.update_user({"password": data.password})
-        return {"message": "Password updated successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/sync", status_code=status.HTTP_200_OK)
-async def sync_user(
-    db: AsyncSession = Depends(get_db),
-    token: str = Depends(supabase_service.oauth2_scheme)
-):
-    """
-    Sync user from Supabase to local DB.
-    Call this after successful login with Google/Facebook/Apple on Frontend.
-    """
+    current_user.password_hash = hash_password(data.password)
+    await db.commit()
+    return {"message": "Password updated successfully"}
+
+
+# ─── Google OAuth ─────────────────────────────────────────────────────
+
+class GoogleTokenRequest:
+    """Not a Pydantic model — used for clarity."""
+    pass
+
+from pydantic import BaseModel
+
+class GoogleAuth(BaseModel):
+    id_token: str
+
+@router.post("/google", response_model=Token)
+async def google_login(data: GoogleAuth, db: AsyncSession = Depends(get_db)):
+    """Verify Google ID token and create/login user."""
     try:
-        # Get user info from Supabase
-        user_response = supabase_service.get_user(token)
-        if not user_response.user:
-            raise HTTPException(status_code=401, detail="Invalid token")
-            
-        user_data = user_response.user
-        
-        # Check if user exists in local DB
-        result = await db.execute(select(User).where(User.id == user_data.id))
-        existing_user = result.scalars().first()
-        
-        if not existing_user:
-            # Create new user
-            new_user = User(
-                id=user_data.id,
-                email=user_data.email,
-                full_name=user_data.user_metadata.get("full_name") or user_data.user_metadata.get("name")
-            )
-            db.add(new_user)
-            await db.commit()
-            await db.refresh(new_user)
-            
-            # Seed default categories
-            await category_service.seed_user_categories(db, new_user.id)
-            return {"message": "User synced and created successfully"}
-            
-        return {"message": "User already exists, sync complete"}
-        
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        idinfo = id_token.verify_oauth2_token(
+            data.id_token,
+            google_requests.Request(),
+            settings.GOOGLE_CLIENT_ID,
+        )
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid Google token")
+
+    email = idinfo.get("email")
+    name = idinfo.get("name")
+    if not email:
+        raise HTTPException(status_code=400, detail="Google account has no email")
+
+    # Find or create user
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalars().first()
+
+    if not user:
+        user = User(
+            email=email,
+            full_name=name,
+            auth_provider="google",
+            is_verified=True,  # Google users are pre-verified
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+
+        # Seed default categories
+        await category_service.seed_user_categories(db, user.id)
+
+    access_token = create_access_token(data={"sub": user.email})
+    refresh_token = create_refresh_token(data={"sub": user.email})
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "refresh_token": refresh_token,
+    }

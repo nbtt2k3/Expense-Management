@@ -148,7 +148,9 @@ export const expenseApi = {
   deleteExpense: (id: string) => api.delete(`/expenses/${id}`),
   getCategories: (params?: any) => api.get('/expenses/categories', { params }),
   createCategory: (name: string, type: 'income' | 'expense' = 'expense') => api.post('/expenses/categories', { name, type }),
+  updateCategory: (id: number, name: string, type: 'income' | 'expense') => api.put(`/expenses/categories/${id}`, { name, type }),
   getMonthlySummary: () => api.get('/expenses/summary/monthly'),
+  deleteCategory: (id: number) => api.delete(`/expenses/categories/${id}`),
 
   // Incomes
   getIncomes: (params?: any) => api.get('/incomes/', { params }),
@@ -161,6 +163,8 @@ export const expenseApi = {
   // Budgets
   getBudgets: (params?: any) => api.get('/budgets/', { params }),
   createBudget: (data: any) => api.post('/budgets/', data),
+  updateBudget: (id: number, data: any) => api.put(`/budgets/${id}`, data),
+  deleteBudget: (id: number) => api.delete(`/budgets/${id}`),
   getBudgetProgress: (params?: any) => api.get('/budgets/progress', { params }),
   getAnalytics: () => api.get('/expenses/analytics'),
 };

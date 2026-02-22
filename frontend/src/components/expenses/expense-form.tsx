@@ -13,6 +13,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { CurrencyInput } from '@/components/ui/currency-input';
 import {
     Select,
     SelectContent,
@@ -24,32 +25,37 @@ import { Category, Expense } from '@/types';
 import { useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { vi, enUS } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-
-const formSchema = z.object({
-    description: z.string().min(1, 'Description is required'),
-    amount: z.coerce.number().min(0.01, 'Amount must be greater than 0'),
-    category_id: z.coerce.number().min(1, 'Category is required'),
-    date: z.date(),
-});
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface ExpenseFormProps {
     initialData?: Expense | null;
     categories: Category[];
-    onSubmit: (data: z.infer<typeof formSchema>) => void;
+    onSubmit: (data: any) => void;
     isLoading?: boolean;
     onCancel?: () => void;
 }
 
 export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCancel }: ExpenseFormProps) {
+    const { t, locale, translateCategoryName } = useLanguage();
+    const dateFnsLocale = locale === 'vi' ? vi : enUS;
+
+    const formSchema = z.object({
+        description: z.string().min(1, t.validation.descriptionRequired),
+        amount: z.coerce.number({ message: t.validation.amountMin }).min(0.01, t.validation.amountMin),
+        category_id: z.coerce.number({ message: t.validation.categoryRequired }).min(1, t.validation.categoryRequired),
+        date: z.date(),
+    });
+
     const form = useForm<any>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
             description: '',
             amount: 0,
-            category_id: undefined,
+            category_id: undefined as any,
             date: new Date(),
         },
     });
@@ -72,7 +78,7 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
         }
     }, [initialData, form]);
 
-    const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    const handleSubmit = (values: any) => {
         onSubmit(values);
     };
 
@@ -84,9 +90,9 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Description</FormLabel>
+                            <FormLabel>{t.common.description}</FormLabel>
                             <FormControl>
-                                <Input placeholder="Lunch, Taxi, etc." {...field} />
+                                <Input placeholder={t.common.descriptionPlaceholder} {...field} disabled={isLoading} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -99,9 +105,14 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
                         name="amount"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Amount</FormLabel>
+                                <FormLabel>{t.common.amount}</FormLabel>
                                 <FormControl>
-                                    <Input type="number" step="0.01" placeholder="0.00" {...field} />
+                                    <CurrencyInput
+                                        placeholder={t.common.amountPlaceholder}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        disabled={isLoading}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -113,21 +124,21 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
                         name="category_id"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Category</FormLabel>
+                                <FormLabel>{t.common.category}</FormLabel>
                                 <Select
                                     onValueChange={field.onChange}
-                                    value={field.value?.toString()}
-                                    defaultValue={field.value?.toString()}
+                                    value={field.value ? String(field.value) : ""}
+                                    disabled={isLoading}
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select a category" />
+                                            <SelectValue placeholder={t.common.selectCategory} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
                                         {categories.map((category) => (
                                             <SelectItem key={category.id} value={category.id.toString()}>
-                                                {category.name}
+                                                {translateCategoryName(category.name)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -143,7 +154,7 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
                     name="date"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
-                            <FormLabel>Date</FormLabel>
+                            <FormLabel>{t.common.date}</FormLabel>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>
@@ -153,11 +164,12 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
                                                 "w-full pl-3 text-left font-normal",
                                                 !field.value && "text-muted-foreground"
                                             )}
+                                            disabled={isLoading}
                                         >
                                             {field.value ? (
-                                                format(field.value, "PPP")
+                                                format(field.value, "PPP", { locale: dateFnsLocale })
                                             ) : (
-                                                <span>Pick a date</span>
+                                                <span>{t.common.pickDate}</span>
                                             )}
                                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                         </Button>
@@ -182,12 +194,13 @@ export function ExpenseForm({ initialData, categories, onSubmit, isLoading, onCa
 
                 <div className="flex justify-end gap-2 pt-4">
                     {onCancel && (
-                        <Button type="button" variant="outline" onClick={onCancel}>
-                            Cancel
+                        <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+                            {t.common.cancel}
                         </Button>
                     )}
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Saving...' : initialData ? 'Update Expense' : 'Add Expense'}
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isLoading ? (t.common.saving || 'Saving...') : initialData ? t.common.updateExpense : t.expenses.addExpense}
                     </Button>
                 </div>
             </form>

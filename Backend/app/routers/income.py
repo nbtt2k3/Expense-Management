@@ -34,12 +34,14 @@ async def create_income(
 async def get_incomes(
     start_date: Optional[datetime] = Query(None),
     end_date: Optional[datetime] = Query(None),
+    search: Optional[str] = Query(None),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
+    sort: str = Query("date_desc"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return await income_service.get_incomes(db, current_user.id, start_date, end_date, page, limit)
+    return await income_service.get_incomes(db, current_user.id, start_date, end_date, search, page, limit, sort)
 
 @router.get("/{id}", response_model=IncomeResponse)
 async def get_income(

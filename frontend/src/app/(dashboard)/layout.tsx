@@ -15,21 +15,23 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { logout } from '@/lib/api';
+import { useLanguage } from '@/i18n/LanguageContext';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { ThemeToggle } from '@/components/theme-toggle';
 
-const navItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/expenses', label: 'Expenses', icon: Receipt },
-    { href: '/incomes', label: 'Incomes', icon: TrendingUp },
-    { href: '/budget', label: 'Budget', icon: Wallet },
-    { href: '/analytics', label: 'Analytics', icon: PieChart },
-    { href: '/categories', label: 'Categories', icon: Tags },
-    { href: '/settings', label: 'Settings', icon: Settings },
+const navKeys = [
+    { href: '/dashboard', key: 'dashboard' as const, icon: LayoutDashboard },
+    { href: '/expenses', key: 'expenses' as const, icon: Receipt },
+    { href: '/incomes', key: 'incomes' as const, icon: TrendingUp },
+    { href: '/budget', key: 'budget' as const, icon: Wallet },
+    { href: '/analytics', key: 'analytics' as const, icon: PieChart },
+    { href: '/categories', key: 'categories' as const, icon: Tags },
+    { href: '/settings', key: 'settings' as const, icon: Settings },
 ];
 
 export default function DashboardLayout({
@@ -39,22 +41,23 @@ export default function DashboardLayout({
 }) {
     const pathname = usePathname();
     const router = useRouter();
+    const { t } = useLanguage();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleLogout = async () => {
         await logout();
-        toast('Logged out successfully');
-        router.push('/login');
+        toast.success(t.auth.loggedOut);
+        window.location.href = '/login';
     };
 
     const Sidebar = () => (
         <div className="flex flex-col h-full bg-slate-900 text-white">
             <div className="p-6 flex items-center justify-between">
-                <h1 className="text-2xl font-bold tracking-tight text-emerald-400">ExpenseTracker</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-emerald-400">{t.common.appName}</h1>
                 <ThemeToggle />
             </div>
             <nav className="flex-1 px-4 space-y-2">
-                {navItems.map((item) => {
+                {navKeys.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
                     return (
@@ -70,11 +73,14 @@ export default function DashboardLayout({
                             )}
                         >
                             <Icon className="w-5 h-5" />
-                            {item.label}
+                            {t.nav[item.key]}
                         </Link>
                     );
                 })}
             </nav>
+            <div className="px-4 py-2">
+                <LanguageSwitcher />
+            </div>
             <div className="p-4 border-t border-slate-800">
                 <Button
                     variant="ghost"
@@ -82,7 +88,7 @@ export default function DashboardLayout({
                     onClick={handleLogout}
                 >
                     <LogOut className="w-5 h-5 mr-3" />
-                    Logout
+                    {t.auth.signOut}
                 </Button>
             </div>
         </div>
@@ -99,8 +105,9 @@ export default function DashboardLayout({
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Mobile Header */}
                 <header className="md:hidden flex items-center justify-between p-4 bg-slate-900 text-white shadow-sm">
-                    <span className="font-bold text-lg text-emerald-400">ExpenseTracker</span>
+                    <span className="font-bold text-lg text-emerald-400">{t.common.appName}</span>
                     <div className="flex items-center gap-2">
+                        <LanguageSwitcher />
                         <ThemeToggle />
                         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                             <SheetTrigger asChild>
@@ -109,6 +116,7 @@ export default function DashboardLayout({
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side="left" className="p-0 border-r-slate-800 bg-slate-900 w-64 text-white">
+                                <SheetTitle className="sr-only">{t.nav.dashboard}</SheetTitle>
                                 <Sidebar />
                             </SheetContent>
                         </Sheet>

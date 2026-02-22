@@ -12,7 +12,7 @@ interface OverviewProps {
 
 export function Overview({ data }: OverviewProps) {
     return (
-        <ResponsiveContainer width="100%" height={350}>
+        <ResponsiveContainer width="100%" height={350} minHeight={350}>
             <BarChart data={data}>
                 <XAxis
                     dataKey="name"

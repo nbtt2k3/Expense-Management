@@ -52,8 +52,10 @@ class IncomeService:
         user_id: UUID,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        search: Optional[str] = None,
         page: int = 1,
-        limit: int = 20
+        limit: int = 20,
+        sort: str = "date_desc"
     ):
         query = select(Income).where(Income.user_id == user_id)
 
@@ -61,8 +63,18 @@ class IncomeService:
             query = query.where(Income.date >= start_date)
         if end_date:
             query = query.where(Income.date <= end_date)
-            
-        query = query.order_by(desc(Income.date))
+        if search:
+            search_filter = f"%{search}%"
+            query = query.where(Income.description.ilike(search_filter))
+
+        if sort == "date_asc":
+            query = query.order_by(asc(Income.date))
+        elif sort == "amount_desc":
+            query = query.order_by(desc(Income.amount))
+        elif sort == "amount_asc":
+            query = query.order_by(asc(Income.amount))
+        else:
+            query = query.order_by(desc(Income.date))
 
         # Count
         count_query = select(func.count()).select_from(query.subquery())

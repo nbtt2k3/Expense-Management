@@ -30,6 +30,7 @@ class BudgetResponse(BudgetBase):
     model_config = ConfigDict(from_attributes=True)
 
 class BudgetStatusResponse(BaseModel):
+    id: Optional[int] = None
     category_id: Optional[int] = None
     category_name: Optional[str] = "Global"
     budget: Decimal

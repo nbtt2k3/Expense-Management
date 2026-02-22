@@ -3,6 +3,7 @@ export interface Category {
     id: number;
     name: string;
     type: 'income' | 'expense';
+    is_default: boolean;
 }
 
 export interface Expense {

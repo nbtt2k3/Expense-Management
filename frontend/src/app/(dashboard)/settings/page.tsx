@@ -3,41 +3,55 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/lib/api';
 import { toast } from 'sonner';
 import { LogOut, User, Shield, Bell } from 'lucide-react';
+import { useLanguage, Currency } from '@/i18n/LanguageContext';
 
 export default function SettingsPage() {
+    const { t, locale, currency, setCurrency } = useLanguage();
     const router = useRouter();
     const [userEmail, setUserEmail] = useState<string>('');
 
     useEffect(() => {
-        // Get stored user info
         if (typeof window !== 'undefined') {
-            const email = localStorage.getItem('user_email') || 'Unknown';
+            const email = localStorage.getItem('user_email') || t.common.unknown;
             setUserEmail(email);
         }
     }, []);
 
     const handleLogout = async () => {
         await logout();
-        toast('Logged out successfully');
-        router.push('/login');
+        toast(t.auth.loggedOut);
+        window.location.href = '/login';
     };
 
-    const handleClearData = () => {
+    const handleClearData = async () => {
         if (typeof window !== 'undefined') {
-            localStorage.clear();
-            toast('Local data cleared');
-            router.push('/login');
+            await logout(); // This also clears localStorage and cookies for auth
+            localStorage.clear(); // Clear any other local data like preferences
+            toast(t.settings.localDataCleared);
+            window.location.href = '/login';
         }
     };
 
+    const handleCurrencyChange = (value: string) => {
+        setCurrency(value as Currency);
+        toast.success(t.settings.currencyChanged);
+    };
+
+    const currentLanguageLabel = locale === 'vi' ? t.settings.vietnamese : t.settings.english;
+
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm gap-4">
+                <div>
+                    <h2 className="text-2xl font-bold tracking-tight">{t.settings.title}</h2>
+                </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -46,20 +60,20 @@ export default function SettingsPage() {
                     <CardHeader>
                         <div className="flex items-center gap-2">
                             <User className="h-5 w-5 text-muted-foreground" />
-                            <CardTitle>Profile</CardTitle>
+                            <CardTitle>{t.settings.profile}</CardTitle>
                         </div>
-                        <CardDescription>Your account information</CardDescription>
+                        <CardDescription>{t.settings.accountInfo}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
-                            <label className="text-sm font-medium text-muted-foreground">Email</label>
+                            <label className="text-sm font-medium text-muted-foreground">{t.auth.email}</label>
                             <p className="text-base font-medium">{userEmail}</p>
                         </div>
                         <div>
-                            <label className="text-sm font-medium text-muted-foreground">Account Status</label>
+                            <label className="text-sm font-medium text-muted-foreground">{t.settings.accountStatus}</label>
                             <p className="text-sm">
                                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-                                    ● Active
+                                    ● {t.settings.active}
                                 </span>
                             </p>
                         </div>
@@ -71,18 +85,26 @@ export default function SettingsPage() {
                     <CardHeader>
                         <div className="flex items-center gap-2">
                             <Bell className="h-5 w-5 text-muted-foreground" />
-                            <CardTitle>Preferences</CardTitle>
+                            <CardTitle>{t.settings.preferences}</CardTitle>
                         </div>
-                        <CardDescription>App display settings</CardDescription>
+                        <CardDescription>{t.settings.appSettings}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
-                            <label className="text-sm font-medium text-muted-foreground">Currency</label>
-                            <p className="text-base font-medium">USD ($)</p>
+                            <label className="text-sm font-medium text-muted-foreground">{t.settings.currency}</label>
+                            <Select value={currency} onValueChange={handleCurrencyChange}>
+                                <SelectTrigger className="mt-1">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="USD">{t.settings.currencyUSD}</SelectItem>
+                                    <SelectItem value="VND">{t.settings.currencyVND}</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div>
-                            <label className="text-sm font-medium text-muted-foreground">Language</label>
-                            <p className="text-base font-medium">English</p>
+                            <label className="text-sm font-medium text-muted-foreground">{t.settings.language}</label>
+                            <p className="text-base font-medium">{currentLanguageLabel}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -92,9 +114,9 @@ export default function SettingsPage() {
                     <CardHeader>
                         <div className="flex items-center gap-2">
                             <Shield className="h-5 w-5 text-muted-foreground" />
-                            <CardTitle>Security & Session</CardTitle>
+                            <CardTitle>{t.settings.securitySession}</CardTitle>
                         </div>
-                        <CardDescription>Manage your account session</CardDescription>
+                        <CardDescription>{t.settings.manageSession}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="flex flex-col sm:flex-row gap-3">
@@ -104,18 +126,18 @@ export default function SettingsPage() {
                                 className="gap-2"
                             >
                                 <LogOut className="h-4 w-4" />
-                                Sign Out
+                                {t.auth.signOut}
                             </Button>
                             <Button
                                 variant="destructive"
                                 onClick={handleClearData}
                                 className="gap-2"
                             >
-                                Clear Local Data & Sign Out
+                                {t.settings.clearData}
                             </Button>
                         </div>
                         <p className="text-xs text-muted-foreground">
-                            Signing out will clear your session token. Your data on the server is not affected.
+                            {t.settings.sessionNote}
                         </p>
                     </CardContent>
                 </Card>

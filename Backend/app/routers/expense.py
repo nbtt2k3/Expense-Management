@@ -15,7 +15,7 @@ from fastapi.responses import StreamingResponse
 
 
 from app.models.category import Category
-from app.schemas.category import CategoryCreate, CategoryResponse
+from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate
 
 router = APIRouter(prefix="/expenses", tags=["Expenses"])
 
@@ -25,6 +25,19 @@ async def create_category(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    # Check if category with same name AND type exists
+    existing_category_query = select(Category).where(
+        Category.user_id == current_user.id,
+        Category.type == category.type,
+        Category.name.ilike(category.name)
+    )
+    existing_category_result = await db.execute(existing_category_query)
+    if existing_category_result.scalars().first():
+        raise HTTPException(
+            status_code=400,
+            detail="A category with this name already exists."
+        )
+
     new_category = Category(name=category.name, type=category.type, user_id=current_user.id)
     db.add(new_category)
     await db.commit()
@@ -42,6 +55,82 @@ async def get_categories(
         query = query.where(Category.type == type)
     result = await db.execute(query)
     return result.scalars().all()
+
+@router.put("/categories/{id}", response_model=CategoryResponse)
+async def update_category(
+    id: int,
+    category_update: CategoryUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    result = await db.execute(
+        select(Category).where(Category.id == id, Category.user_id == current_user.id)
+    )
+    category = result.scalars().first()
+
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    if category.is_default:
+        raise HTTPException(status_code=403, detail="Cannot edit default category")
+
+    # If name or type is being updated, check for uniqueness constraints
+    new_name = category_update.name if category_update.name else category.name
+    new_type = category_update.type if category_update.type else category.type
+    
+    if (category_update.name and category_update.name.lower() != category.name.lower()) or (category_update.type and category_update.type != category.type):
+        existing_category_query = select(Category).where(
+            Category.user_id == current_user.id,
+            Category.type == new_type,
+            Category.name.ilike(new_name),
+            Category.id != id
+        )
+        existing_category_result = await db.execute(existing_category_query)
+        if existing_category_result.scalars().first():
+            raise HTTPException(
+                status_code=400,
+                detail="A category with this name already exists."
+            )
+
+    update_data = category_update.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(category, key, value)
+
+    await db.commit()
+    await db.refresh(category)
+    return category
+
+@router.delete("/categories/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_category(
+    id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    result = await db.execute(
+        select(Category).where(Category.id == id, Category.user_id == current_user.id)
+    )
+    category = result.scalars().first()
+
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    if category.is_default:
+        raise HTTPException(status_code=403, detail="Cannot delete default category")
+
+    # Check for linked expenses
+    from app.models.expense import Expense
+    linked = await db.execute(
+        select(Expense).where(Expense.category_id == id, Expense.is_deleted == False).limit(1)
+    )
+    if linked.scalars().first():
+        raise HTTPException(
+            status_code=400,
+            detail="Category has linked expenses. Please reassign them first."
+        )
+
+    await db.delete(category)
+    await db.commit()
+    return None
 
 @router.get("/export")
 async def export_expenses(

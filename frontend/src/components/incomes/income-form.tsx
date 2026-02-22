@@ -13,12 +13,14 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { CurrencyInput } from '@/components/ui/currency-input';
 import { Income } from '@/types';
 import { useEffect } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { vi, enUS } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -29,24 +31,28 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Category } from '@/types';
-
-const formSchema = z.object({
-    source: z.string().min(1, 'Category is required'),
-    amount: z.coerce.number().min(0.01, 'Amount must be greater than 0'),
-    description: z.string().optional(),
-    date: z.date(),
-    category_id: z.number().optional(), // We'll set this when source (category name) is selected
-});
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface IncomeFormProps {
     initialData?: Income | null;
-    categories?: Category[]; // Make optional to avoid breaking if not passed yet
-    onSubmit: (data: z.infer<typeof formSchema>) => void;
+    categories?: Category[];
+    onSubmit: (data: any) => void;
     isLoading?: boolean;
     onCancel?: () => void;
 }
 
 export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, onCancel }: IncomeFormProps) {
+    const { t, locale, translateCategoryName } = useLanguage();
+    const dateFnsLocale = locale === 'vi' ? vi : enUS;
+
+    const formSchema = z.object({
+        source: z.string().min(1, t.validation.sourceRequired),
+        amount: z.coerce.number({ message: t.validation.amountMin }).min(0.01, t.validation.amountMin),
+        description: z.string().optional(),
+        date: z.date(),
+        category_id: z.coerce.number({ message: t.validation.categoryRequired }).optional(),
+    });
+
     const form = useForm<any>({
         resolver: zodResolver(formSchema) as any,
         defaultValues: {
@@ -54,14 +60,14 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
             amount: 0,
             description: '',
             date: new Date(),
-            category_id: undefined,
+            category_id: undefined as any,
         },
     });
 
     useEffect(() => {
         if (initialData) {
             form.reset({
-                source: initialData.source, // This should match category name
+                source: initialData.source,
                 amount: initialData.amount,
                 description: initialData.description || '',
                 date: new Date(initialData.date),
@@ -91,28 +97,27 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
                         name="source"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Source (Category)</FormLabel>
+                                <FormLabel>{t.common.sourceCategory}</FormLabel>
                                 <Select
                                     onValueChange={(value) => {
-                                        // Find category by name to set ID
                                         const cat = categories.find(c => c.name === value);
                                         field.onChange(value);
                                         if (cat) {
                                             form.setValue('category_id', cat.id);
                                         }
                                     }}
-                                    value={field.value}
-                                    defaultValue={field.value}
+                                    value={field.value || ""}
+                                    disabled={isLoading}
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select income source" />
+                                            <SelectValue placeholder={t.common.selectIncomeSource} />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
                                         {categories.map((category) => (
                                             <SelectItem key={category.id} value={category.name}>
-                                                {category.name}
+                                                {translateCategoryName(category.name)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -127,9 +132,14 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
                         name="amount"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Amount</FormLabel>
+                                <FormLabel>{t.common.amount}</FormLabel>
                                 <FormControl>
-                                    <Input type="number" step="0.01" placeholder="0.00" {...field} />
+                                    <CurrencyInput
+                                        placeholder={t.common.amountPlaceholder}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                        disabled={isLoading}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -142,7 +152,7 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
                     name="date"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
-                            <FormLabel>Date</FormLabel>
+                            <FormLabel>{t.common.date}</FormLabel>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>
@@ -152,11 +162,12 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
                                                 "w-full pl-3 text-left font-normal",
                                                 !field.value && "text-muted-foreground"
                                             )}
+                                            disabled={isLoading}
                                         >
                                             {field.value ? (
-                                                format(field.value, "PPP")
+                                                format(field.value, "PPP", { locale: dateFnsLocale })
                                             ) : (
-                                                <span>Pick a date</span>
+                                                <span>{t.common.pickDate}</span>
                                             )}
                                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                         </Button>
@@ -184,9 +195,9 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Description (Optional)</FormLabel>
+                            <FormLabel>{t.common.descriptionOptional}</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Details about this income..." {...field} />
+                                <Textarea placeholder={t.common.incomeDescPlaceholder} {...field} disabled={isLoading} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -195,15 +206,16 @@ export function IncomeForm({ initialData, categories = [], onSubmit, isLoading, 
 
                 <div className="flex justify-end gap-2 pt-4">
                     {onCancel && (
-                        <Button type="button" variant="outline" onClick={onCancel}>
-                            Cancel
+                        <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
+                            {t.common.cancel}
                         </Button>
                     )}
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Saving...' : initialData ? 'Update Income' : 'Add Income'}
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isLoading ? (t.common.saving || 'Saving...') : initialData ? t.common.updateIncome : t.incomes.addIncome}
                     </Button>
                 </div>
-            </form>
-        </Form>
+            </form >
+        </Form >
     );
 }
