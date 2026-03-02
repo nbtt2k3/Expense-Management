@@ -115,41 +115,46 @@ class ExpenseService:
             output.seek(0)
             output.truncate(0)
 
-    async def get_analytics_data(self, db: AsyncSession, user_id: UUID):
+    async def get_analytics_data(self, db: AsyncSession, user_id: UUID, year: Optional[int] = None):
         from app.models.category import Category
+        from datetime import timezone as tz
         
         today = datetime.now()
-        start_of_year = today.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        target_year = year if year else today.year
+        # Use timezone-aware UTC datetimes to match DateTime(timezone=True) columns
+        start_of_year = datetime(target_year, 1, 1, 0, 0, 0, tzinfo=tz.utc)
+        end_of_year = datetime(target_year + 1, 1, 1, 0, 0, 0, tzinfo=tz.utc)
         
-        # 1. Category Breakdown (Current Year)
-        # Group by Category Name
+        # 1. Category Breakdown — select from Expense, join Category explicitly
         cat_query = select(
-            Category.name, 
+            Category.name,
             func.sum(Expense.amount).label("total")
-        ).join(Expense).where(
+        ).select_from(Expense).join(
+            Category, Expense.category_id == Category.id
+        ).where(
             Expense.user_id == user_id,
             Expense.is_deleted == False,
-            Expense.date >= start_of_year
-        ).group_by(Category.name)
+            Expense.date >= start_of_year,
+            Expense.date < end_of_year
+        ).group_by(Category.name).order_by(func.sum(Expense.amount).desc())
         
         cat_result = await db.execute(cat_query)
         categories_data = cat_result.all()
         
-        total_year_expense = sum([row.total for row in categories_data]) or 1 # Avoid division by zero
+        total_year_expense = sum([row.total for row in categories_data]) or 1  # Avoid division by zero
         
         category_breakdown = []
         for row in categories_data:
             percentage = (row.total / total_year_expense) * 100
             category_breakdown.append({
                 "category_name": row.name,
-                "total_amount": row.total,
+                "total_amount": float(row.total),
                 "percentage": round(percentage, 2)
             })
             
-        # 2. Monthly Trend (Last 6 Months or Current Year)
+        # 2. Monthly Trend (Income vs Expense)
         from app.models.income import Income
 
-        # 2. Monthly Trend (Income vs Expense)
         # Expense Trend
         expense_trend_query = select(
             func.to_char(Expense.date, 'YYYY-MM').label("month"),
@@ -157,11 +162,12 @@ class ExpenseService:
         ).where(
             Expense.user_id == user_id,
             Expense.is_deleted == False,
-            Expense.date >= start_of_year
+            Expense.date >= start_of_year,
+            Expense.date < end_of_year
         ).group_by("month").order_by("month")
         
         expense_trend_result = await db.execute(expense_trend_query)
-        expense_map = {row.month: row.total for row in expense_trend_result}
+        expense_map = {row.month: float(row.total) for row in expense_trend_result}
         
         # Income Trend
         income_trend_query = select(
@@ -169,13 +175,14 @@ class ExpenseService:
             func.sum(Income.amount).label("total")
         ).where(
             Income.user_id == user_id,
-            Income.date >= start_of_year
+            Income.date >= start_of_year,
+            Income.date < end_of_year
         ).group_by("month").order_by("month")
         
         income_trend_result = await db.execute(income_trend_query)
-        income_map = {row.month: row.total for row in income_trend_result}
+        income_map = {row.month: float(row.total) for row in income_trend_result}
         
-        # Merge
+        # Merge months
         all_months = sorted(list(set(list(expense_map.keys()) + list(income_map.keys()))))
         
         monthly_trend = []
@@ -193,25 +200,45 @@ class ExpenseService:
 
 
 
-    async def get_monthly_summary(self, db: AsyncSession, user_id: UUID):
+    async def get_monthly_summary(self, db: AsyncSession, user_id: UUID, month: Optional[int] = None, year: Optional[int] = None):
         today = datetime.now()
-        start_of_month = today.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        
+        target_year = year if year else today.year
+        target_month = month if month else today.month
+        
+        # Calculate boundaries
+        start_of_month = datetime(target_year, target_month, 1, 0, 0, 0)
+        
+        if target_month == 12:
+            start_of_next_month = datetime(target_year + 1, 1, 1, 0, 0, 0)
+        else:
+            start_of_next_month = datetime(target_year, target_month + 1, 1, 0, 0, 0)
+
+        start_of_year = datetime(target_year, 1, 1, 0, 0, 0)
+
+        # For "today", we only show today's total if they are viewing the current month/year
+        is_current_month = (target_year == today.year and target_month == today.month)
+        start_of_day = today.replace(hour=0, minute=0, second=0, microsecond=0) if is_current_month else None
         start_of_year = today.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
         start_of_day = today.replace(hour=0, minute=0, second=0, microsecond=0)
 
         # 1. Total Expenses
-        async def get_total(start_date):
+        async def get_total(start_date, end_date_opt: Optional[datetime] = None):
             query = select(func.sum(Expense.amount)).where(
                 Expense.user_id == user_id,
                 Expense.date >= start_date,
                 Expense.is_deleted == False
             )
+            if end_date_opt:
+                query = query.where(Expense.date < end_date_opt)
+                
             result = await db.execute(query)
             return result.scalar() or 0
 
-        total_month = await get_total(start_of_month)
-        total_year = await get_total(start_of_year)
-        total_today = await get_total(start_of_day)
+        total_month = await get_total(start_of_month, start_of_next_month)
+        # Year total is still until "now" or end of the year if viewing past year
+        total_year = await get_total(start_of_year, datetime(target_year + 1, 1, 1, 0, 0, 0) if target_year != today.year else None)
+        total_today = await get_total(start_of_day) if start_of_day else 0
 
         # 2. Total by Category (Current Month)
         from app.models.category import Category
@@ -222,6 +249,7 @@ class ExpenseService:
         ).join(Category).where(
             Expense.user_id == user_id,
             Expense.date >= start_of_month,
+            Expense.date < start_of_next_month,
             Expense.is_deleted == False
         ).group_by(Expense.category_id, Category.name)
         
@@ -239,35 +267,76 @@ class ExpenseService:
         ).where(
             Expense.user_id == user_id,
             Expense.date >= start_of_month,
+            Expense.date < start_of_next_month,
             Expense.is_deleted == False
         ).group_by("date").order_by("date")
 
         daily_result = await db.execute(daily_query)
-        daily = [
-            {"date": row.date, "total": row.total}
-            for row in daily_result
-        ]
+        daily_records = {row.date.strftime("%Y-%m-%d"): row.total for row in daily_result}
+        
+        # Fill in zero for missing days
+        import calendar
+        from datetime import timedelta
+        
+        days_in_month = calendar.monthrange(target_year, target_month)[1]
+        
+        # If viewing current month, only show up to today
+        end_day = today.day if is_current_month else days_in_month
+        
+        daily = []
+        for d in range(1, end_day + 1):
+            date_str = datetime(target_year, target_month, d).strftime("%Y-%m-%d")
+            daily.append({
+                "date": date_str,
+                "total": daily_records.get(date_str, 0.0)
+            })
 
         # 4. Total Income & Balance
         from app.models.income import Income
         
-        async def get_total_income(start_date):
+        async def get_total_income(start_date, end_date_opt: Optional[datetime] = None):
             query = select(func.sum(Income.amount)).where(
                 Income.user_id == user_id,
                 Income.date >= start_date
             )
+            if end_date_opt:
+                query = query.where(Income.date < end_date_opt)
             result = await db.execute(query)
             return result.scalar() or 0
 
-        total_income_month = await get_total_income(start_of_month)
+        total_income_month = await get_total_income(start_of_month, start_of_next_month)
+        total_income_year = await get_total_income(
+            datetime(target_year, 1, 1, 0, 0, 0),
+            datetime(target_year + 1, 1, 1, 0, 0, 0) if target_year != today.year else None
+        )
         balance = total_income_month - total_month
+
+        # 5. Previous month for trend comparison
+        if target_month == 1:
+            prev_month_num = 12
+            prev_month_year = target_year - 1
+        else:
+            prev_month_num = target_month - 1
+            prev_month_year = target_year
+
+        start_of_prev_month = datetime(prev_month_year, prev_month_num, 1, 0, 0, 0)
+        if prev_month_num == 12:
+            start_of_next_prev_month = datetime(prev_month_year + 1, 1, 1, 0, 0, 0)
+        else:
+            start_of_next_prev_month = datetime(prev_month_year, prev_month_num + 1, 1, 0, 0, 0)
+
+        prev_month_expense = await get_total(start_of_prev_month, start_of_next_prev_month)
+        prev_month_income = await get_total_income(start_of_prev_month, start_of_next_prev_month)
 
         return {
             "total_month": total_month,
             "total_today": total_today,
             "total_year": total_year,
             "total_income_month": total_income_month,
+            "total_income_year": total_income_year,
             "balance": balance,
+            "prev_month_expense": prev_month_expense,
+            "prev_month_income": prev_month_income,
             "by_category": by_category,
             "daily": daily
         }

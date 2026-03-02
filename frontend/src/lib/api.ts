@@ -1,4 +1,10 @@
 import axios from 'axios';
+import { createClient } from '@supabase/supabase-js';
+
+// Supabase client for storage
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
@@ -149,7 +155,7 @@ export const expenseApi = {
   getCategories: (params?: any) => api.get('/expenses/categories', { params }),
   createCategory: (name: string, type: 'income' | 'expense' = 'expense') => api.post('/expenses/categories', { name, type }),
   updateCategory: (id: number, name: string, type: 'income' | 'expense') => api.put(`/expenses/categories/${id}`, { name, type }),
-  getMonthlySummary: () => api.get('/expenses/summary/monthly'),
+  getMonthlySummary: (params?: { month?: number; year?: number }) => api.get('/expenses/summary/monthly', { params }),
   deleteCategory: (id: number) => api.delete(`/expenses/categories/${id}`),
 
   // Incomes
@@ -166,7 +172,33 @@ export const expenseApi = {
   updateBudget: (id: number, data: any) => api.put(`/budgets/${id}`, data),
   deleteBudget: (id: number) => api.delete(`/budgets/${id}`),
   getBudgetProgress: (params?: any) => api.get('/budgets/progress', { params }),
-  getAnalytics: () => api.get('/expenses/analytics'),
+  getAnalytics: (params?: { year?: number }) => api.get('/expenses/analytics', { params }),
+};
+
+export const authApi = {
+  getCurrentUser: () => api.get('/auth/me'),
+  updateProfile: (data: { full_name?: string; avatar_url?: string }) => api.patch('/auth/me', data),
+
+  uploadAvatar: async (file: File, userIdentifier: string) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `avatar_${userIdentifier}.${fileExt}`;
+    const filePath = `avatars/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, { cacheControl: '3600', upsert: true });
+
+    if (error) {
+      throw error;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    // Append timestamp to bust browser cache since the URL will be the same
+    return `${publicUrlData.publicUrl}?t=${new Date().getTime()}`;
+  }
 };
 
 export default api;

@@ -3,6 +3,15 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import en from '@/i18n/en.json';
 import vi from '@/i18n/vi.json';
+import { authApi } from '@/lib/api';
+
+export interface UserProfile {
+    id: string;
+    email: string;
+    full_name: string | null;
+    avatar_url: string | null;
+}
+
 
 export type Locale = 'en' | 'vi';
 export type Currency = 'USD' | 'VND';
@@ -16,16 +25,35 @@ interface LanguageContextType {
     setLocale: (locale: Locale) => void;
     currency: Currency;
     setCurrency: (currency: Currency) => void;
+    isDarkMode: boolean;
+    setDarkMode: (dark: boolean) => void;
     t: TranslationKeys;
     formatCurrency: (amount: number) => string;
     translateCategoryName: (name: string) => string;
+    userProfile: UserProfile | null;
+    setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
+    fetchUserProfile: () => Promise<void>;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const [locale, setLocaleState] = useState<Locale>('en');
-    const [currency, setCurrencyState] = useState<Currency>('USD');
+    const [currency, setCurrencyState] = useState<Currency>('VND');
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+    const fetchUserProfile = useCallback(async () => {
+        try {
+            const token = localStorage.getItem('access_token');
+            if (token) {
+                const response = await authApi.getCurrentUser();
+                setUserProfile(response.data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch user profile:', error);
+        }
+    }, []);
 
     // Load saved preferences
     useEffect(() => {
@@ -37,7 +65,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         if (savedCurrency && (savedCurrency === 'USD' || savedCurrency === 'VND')) {
             setCurrencyState(savedCurrency);
         }
-    }, []);
+        const savedDarkStr = localStorage.getItem('darkMode');
+        const savedDark = savedDarkStr !== null
+            ? savedDarkStr === 'true'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        setIsDarkMode(savedDark);
+        if (savedDark) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        fetchUserProfile();
+    }, [fetchUserProfile]);
 
     const setLocale = useCallback((newLocale: Locale) => {
         setLocaleState(newLocale);
@@ -47,6 +88,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const setCurrency = useCallback((newCurrency: Currency) => {
         setCurrencyState(newCurrency);
         localStorage.setItem('currency', newCurrency);
+    }, []);
+
+    const setDarkMode = useCallback((dark: boolean) => {
+        setIsDarkMode(dark);
+        localStorage.setItem('darkMode', String(dark));
+        if (dark) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
     }, []);
 
     // Fixed exchange rate for demonstration purposes
@@ -79,7 +130,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }, [t]);
 
     return (
-        <LanguageContext.Provider value={{ locale, setLocale, currency, setCurrency, t, formatCurrency, translateCategoryName }}>
+        <LanguageContext.Provider value={{
+            locale, setLocale, currency, setCurrency, isDarkMode, setDarkMode, t, formatCurrency, translateCategoryName,
+            userProfile, setUserProfile, fetchUserProfile
+        }}>
             {children}
         </LanguageContext.Provider>
     );

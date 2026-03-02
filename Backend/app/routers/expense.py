@@ -13,9 +13,10 @@ from app.core.security import get_current_user
 from app.services.expense_service import expense_service
 from fastapi.responses import StreamingResponse
 
-
 from app.models.category import Category
 from app.schemas.category import CategoryCreate, CategoryResponse, CategoryUpdate
+
+
 
 router = APIRouter(prefix="/expenses", tags=["Expenses"])
 
@@ -159,10 +160,11 @@ from app.schemas.analytics import AnalyticsResponse
 
 @router.get("/analytics", response_model=AnalyticsResponse)
 async def get_analytics(
+    year: Optional[int] = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return await expense_service.get_analytics_data(db, current_user.id)
+    return await expense_service.get_analytics_data(db, current_user.id, year=year)
 
 @router.get("/", response_model=PaginatedExpenseResponse)
 async def get_expenses(
@@ -190,10 +192,12 @@ async def get_expenses(
 
 @router.get("/summary/monthly", response_model=DashboardSummaryResponse)
 async def get_dashboard_summary(
+    month: Optional[int] = Query(None, ge=1, le=12),
+    year: Optional[int] = Query(None, ge=2000),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return await expense_service.get_monthly_summary(db, current_user.id)
+    return await expense_service.get_monthly_summary(db, current_user.id, month, year)
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_expense(
@@ -208,7 +212,7 @@ async def create_expense(
     db.add(new_expense)
     await db.commit()
     await db.refresh(new_expense)
-
+    
     # --- Budget Alert Check ---
     budget_warning = None
     if new_expense.category_id:
@@ -288,6 +292,7 @@ async def update_expense(
 
     await db.commit()
     await db.refresh(expense)
+
     return expense
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -304,6 +309,7 @@ async def delete_expense(
         
     expense.is_deleted = True
     await db.commit()
+    
     return None
 
 @router.patch("/{id}/restore", response_model=ExpenseResponse)
@@ -321,4 +327,5 @@ async def restore_expense(
     expense.is_deleted = False
     await db.commit()
     await db.refresh(expense)
+    
     return expense

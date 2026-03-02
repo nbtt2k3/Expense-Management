@@ -122,5 +122,54 @@
   }
   body {
     @apply bg-background text-foreground;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Global cursor-pointer for all interactive/clickable elements */
+  button,
+  [role="button"],
+  a,
+  label[for],
+  select,
+  [tabindex]:not([tabindex="-1"]),
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="submit"],
+  input[type="reset"],
+  summary,
+  [data-radix-collection-item] {
+    cursor: pointer;
+  }
+
+  /* Smooth focus ring — visible on keyboard nav, hidden on mouse */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring/70 rounded-sm;
+  }
+
+  /* Remove outline on non-keyboard clicks */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Nicer text selection colour */
+  ::selection {
+    @apply bg-emerald-500/20 text-emerald-900;
+  }
+
+  /* Smooth scrollbar (webkit) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-300 dark:bg-zinc-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-400 dark:bg-zinc-600;
   }
 }

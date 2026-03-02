@@ -14,6 +14,7 @@ class User(Base):
     password_hash = Column(String, nullable=True)  # Null for Google users
     auth_provider = Column(String, default="email")  # "email" or "google"
     is_verified = Column(Boolean, default=False)
+    avatar_url = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     categories = relationship("Category", back_populates="user")

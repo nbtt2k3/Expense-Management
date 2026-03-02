@@ -75,5 +75,10 @@ class DashboardSummaryResponse(BaseModel):
     total_month: Decimal
     total_today: Decimal
     total_year: Decimal
+    total_income_month: Decimal
+    total_income_year: Decimal
+    balance: Decimal
+    prev_month_expense: Decimal
+    prev_month_income: Decimal
     by_category: List[CategorySummary]
     daily: List[DailySummary]

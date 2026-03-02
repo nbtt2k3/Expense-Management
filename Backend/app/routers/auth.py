@@ -26,6 +26,7 @@ from app.services.category_service import category_service
 from app.schemas.auth import (
     UserRegister, UserLogin, Token, OTPVerify,
     TokenRefresh, UserForgotPassword, UserResetPassword, ResendOTP,
+    UserResponse, UserUpdate
 )
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -310,3 +311,38 @@ async def google_login(data: GoogleAuth, db: AsyncSession = Depends(get_db)):
         "token_type": "bearer",
         "refresh_token": refresh_token,
     }
+
+
+# ─── Profile Management ──────────────────────────────────────────────
+
+@router.get("/me", response_model=UserResponse)
+async def get_current_user_profile(current_user: User = Depends(get_current_user)):
+    """Get current user's profile."""
+    return UserResponse(
+        id=str(current_user.id),
+        email=current_user.email,
+        full_name=current_user.full_name,
+        avatar_url=current_user.avatar_url,
+    )
+
+@router.patch("/me", response_model=UserResponse)
+async def update_current_user_profile(
+    data: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Update current user's profile."""
+    if data.full_name is not None:
+        current_user.full_name = data.full_name
+    if data.avatar_url is not None:
+        current_user.avatar_url = data.avatar_url
+        
+    await db.commit()
+    await db.refresh(current_user)
+    
+    return UserResponse(
+        id=str(current_user.id),
+        email=current_user.email,
+        full_name=current_user.full_name,
+        avatar_url=current_user.avatar_url,
+    )

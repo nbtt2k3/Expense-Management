@@ -34,3 +34,13 @@ class UserForgotPassword(BaseModel):
 class UserResetPassword(BaseModel):
     password: str = Field(..., min_length=6)
     confirm_password: str = Field(..., min_length=6)
+
+class UserResponse(BaseModel):
+    id: str
+    email: EmailStr
+    full_name: Optional[str] = None
+    avatar_url: Optional[str] = None
+
+class UserUpdate(BaseModel):
+    full_name: Optional[str] = None
+    avatar_url: Optional[str] = None

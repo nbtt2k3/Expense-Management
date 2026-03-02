@@ -84,36 +84,33 @@ async def get_budget_progress(
     budgets_result = await db.execute(budgets_query)
     budgets = budgets_result.scalars().all()
 
-    # 2. Get expenses aggregated by category
-    # Global expenses (no category or any category if we want total spend? 
-    # Usually "Global Budget" means "Total Budget". 
-    # "Category Budget" means "Limit for that category".
+    # 2. Get expenses aggregated by category (Single Query for N+1 fix)
+    expense_query = select(
+        Expense.category_id, 
+        func.sum(Expense.amount).label("total")
+    ).where(
+        Expense.user_id == current_user.id,
+        Expense.date >= start_date,
+        Expense.date < end_date,
+        Expense.is_deleted == False
+    ).group_by(Expense.category_id)
     
-    # Strategy:
-    # For each budget:
-    #   if budget.category_id:
-    #       sum expenses with that category_id
-    #   else (Global):
-    #       sum ALL expenses
+    expense_result = await db.execute(expense_query)
+    expense_data = expense_result.all()
+    
+    spent_by_category = {row.category_id: (row.total or Decimal(0)) for row in expense_data}
+    total_spent_all = sum(spent_by_category.values()) if spent_by_category else Decimal(0)
     
     response = []
     
     for budget in budgets:
-        spent_query = select(func.sum(Expense.amount)).where(
-            Expense.user_id == current_user.id,
-            Expense.date >= start_date,
-            Expense.date < end_date,
-            Expense.is_deleted == False
-        )
-        
         category_name = "Global"
         
         if budget.category_id:
-            spent_query = spent_query.where(Expense.category_id == budget.category_id)
+            spent = spent_by_category.get(budget.category_id, Decimal(0))
             category_name = budget.category.name if budget.category else "Unknown"
-        
-        spent_result = await db.execute(spent_query)
-        spent = spent_result.scalar() or Decimal(0)
+        else:
+            spent = total_spent_all
         
         percent_used = (float(spent) / float(budget.amount)) * 100 if budget.amount > 0 else 0
         

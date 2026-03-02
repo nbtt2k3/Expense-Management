@@ -51,12 +51,23 @@ export default function DashboardLayout({
     };
 
     const Sidebar = () => (
-        <div className="flex flex-col h-full bg-slate-900 text-white">
+        <div className="flex flex-col h-full bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800">
             <div className="p-6 flex items-center justify-between">
-                <h1 className="text-2xl font-bold tracking-tight text-emerald-400">{t.common.appName}</h1>
-                <ThemeToggle />
+                <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center shadow-sm shadow-emerald-500/20">
+                        <Wallet className="w-5 h-5 text-white" />
+                    </div>
+                    <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                        Expen<span className="text-emerald-500">zo</span>
+                    </h1>
+                </div>
             </div>
-            <nav className="flex-1 px-4 space-y-2">
+
+            <div className="px-4 pb-2">
+                <p className="px-2 text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-2">Main Menu</p>
+            </div>
+
+            <nav className="flex-1 px-4 space-y-1">
                 {navKeys.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
@@ -66,36 +77,40 @@ export default function DashboardLayout({
                             href={item.href}
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={cn(
-                                "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                                 isActive
-                                    ? "bg-emerald-600 text-white shadow-md"
-                                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                                    ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400"
+                                    : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
                             )}
                         >
-                            <Icon className="w-5 h-5" />
+                            <Icon className={cn("w-5 h-5", isActive ? "text-emerald-500 dark:text-emerald-400" : "text-zinc-400 dark:text-zinc-500")} />
                             {t.nav[item.key]}
                         </Link>
                     );
                 })}
             </nav>
-            <div className="px-4 py-2">
-                <LanguageSwitcher />
-            </div>
-            <div className="p-4 border-t border-slate-800">
-                <Button
-                    variant="ghost"
-                    className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800"
-                    onClick={handleLogout}
-                >
-                    <LogOut className="w-5 h-5 mr-3" />
-                    {t.auth.signOut}
-                </Button>
+
+            <div className="p-4 mt-auto">
+                <div className="bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl p-4 border border-zinc-100 dark:border-zinc-800/50">
+                    <div className="flex items-center justify-between mb-4">
+                        <LanguageSwitcher />
+                        <ThemeToggle />
+                    </div>
+                    <Button
+                        variant="ghost"
+                        className="w-full justify-start text-zinc-500 hover:text-rose-600 hover:bg-rose-50 dark:text-zinc-400 dark:hover:text-rose-400 dark:hover:bg-rose-900/20 rounded-xl transition-colors"
+                        onClick={handleLogout}
+                    >
+                        <LogOut className="w-4 h-4 mr-3" />
+                        {t.auth.signOut}
+                    </Button>
+                </div>
             </div>
         </div>
     );
 
     return (
-        <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950">
+        <div className="flex min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
             {/* Desktop Sidebar */}
             <aside className="hidden md:block w-64 flex-shrink-0">
                 <Sidebar />
@@ -104,19 +119,22 @@ export default function DashboardLayout({
             {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Mobile Header */}
-                <header className="md:hidden flex items-center justify-between p-4 bg-slate-900 text-white shadow-sm">
-                    <span className="font-bold text-lg text-emerald-400">{t.common.appName}</span>
+                <header className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 shadow-sm sticky top-0 z-10">
                     <div className="flex items-center gap-2">
-                        <LanguageSwitcher />
-                        <ThemeToggle />
+                        <div className="w-7 h-7 rounded-lg bg-emerald-500 flex items-center justify-center">
+                            <Wallet className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="font-bold text-lg text-zinc-900 dark:text-zinc-50">Expen<span className="text-emerald-500">zo</span></span>
+                    </div>
+                    <div className="flex items-center gap-2">
                         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon" className="text-white hover:bg-slate-800">
-                                    <Menu className="w-6 h-6" />
+                                <Button variant="ghost" size="icon" className="text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-xl">
+                                    <Menu className="w-5 h-5" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="left" className="p-0 border-r-slate-800 bg-slate-900 w-64 text-white">
-                                <SheetTitle className="sr-only">{t.nav.dashboard}</SheetTitle>
+                            <SheetContent side="left" className="p-0 border-r-zinc-200 dark:border-r-zinc-800 bg-white dark:bg-zinc-950 w-72">
+                                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                                 <Sidebar />
                             </SheetContent>
                         </Sheet>

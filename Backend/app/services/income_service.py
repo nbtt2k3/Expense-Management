@@ -43,6 +43,7 @@ class IncomeService:
 
     async def delete_income(self, db: AsyncSession, income_id: UUID, user_id: UUID):
         income = await self.get_income(db, income_id, user_id)
+        
         await db.delete(income)
         await db.commit()
 
@@ -52,12 +53,16 @@ class IncomeService:
         user_id: UUID,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        category_id: Optional[int] = None,
         search: Optional[str] = None,
         page: int = 1,
         limit: int = 20,
         sort: str = "date_desc"
     ):
         query = select(Income).where(Income.user_id == user_id)
+
+        if category_id:
+            query = query.where(Income.category_id == category_id)
 
         if start_date:
             query = query.where(Income.date >= start_date)

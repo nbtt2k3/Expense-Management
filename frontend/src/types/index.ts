@@ -45,7 +45,10 @@ export interface DashboardSummary {
     total_today: number;
     total_year: number;
     total_income_month: number;
+    total_income_year: number;
     balance: number;
+    prev_month_expense: number;
+    prev_month_income: number;
     by_category: CategorySummary[];
     daily: DailySummary[];
 }
