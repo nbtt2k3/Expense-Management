@@ -77,48 +77,52 @@ function VerifyOTPContent() {
     }
 
     return (
-        <Card className="w-full">
-            <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold text-center">{t.auth.verifyEmail}</CardTitle>
-                <CardDescription className="text-center">
-                    {t.auth.otpSent} <strong>{email}</strong>
+        <Card className="w-full border-0 shadow-none bg-transparent sm:bg-white/80 sm:dark:bg-zinc-950/80 sm:backdrop-blur-xl sm:border sm:shadow-2xl sm:shadow-emerald-500/10 sm:rounded-[2rem] overflow-hidden">
+            <CardHeader className="space-y-3 pb-8 pt-6 sm:pt-10">
+                <CardTitle className="text-3xl font-bold tracking-tight text-center">{t.auth.verifyEmail}</CardTitle>
+                <CardDescription className="text-center text-base">
+                    {t.auth.otpSent} <strong className="text-zinc-900 dark:text-zinc-100">{email}</strong>
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8 sm:px-10 pb-8">
                 <div className="flex justify-center">
                     <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)} disabled={isLoading}>
-                        <InputOTPGroup>
-                            <InputOTPSlot index={0} />
-                            <InputOTPSlot index={1} />
-                            <InputOTPSlot index={2} />
-                            <InputOTPSlot index={3} />
-                            <InputOTPSlot index={4} />
-                            <InputOTPSlot index={5} />
+                        <InputOTPGroup className="gap-2 sm:gap-3 flex justify-between w-full">
+                            <InputOTPSlot className="h-12 w-10 sm:h-14 sm:w-12 text-lg sm:text-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 data-[active=true]:border-emerald-500 data-[active=true]:ring-emerald-500/50" index={0} />
+                            <InputOTPSlot className="h-12 w-10 sm:h-14 sm:w-12 text-lg sm:text-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 data-[active=true]:border-emerald-500 data-[active=true]:ring-emerald-500/50" index={1} />
+                            <InputOTPSlot className="h-12 w-10 sm:h-14 sm:w-12 text-lg sm:text-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 data-[active=true]:border-emerald-500 data-[active=true]:ring-emerald-500/50" index={2} />
+                            <InputOTPSlot className="h-12 w-10 sm:h-14 sm:w-12 text-lg sm:text-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 data-[active=true]:border-emerald-500 data-[active=true]:ring-emerald-500/50" index={3} />
+                            <InputOTPSlot className="h-12 w-10 sm:h-14 sm:w-12 text-lg sm:text-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 data-[active=true]:border-emerald-500 data-[active=true]:ring-emerald-500/50" index={4} />
+                            <InputOTPSlot className="h-12 w-10 sm:h-14 sm:w-12 text-lg sm:text-xl rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 data-[active=true]:border-emerald-500 data-[active=true]:ring-emerald-500/50" index={5} />
                         </InputOTPGroup>
                     </InputOTP>
                 </div>
-                <Button className="w-full" onClick={handleVerify} disabled={isLoading || otp.length !== 6}>
-                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" onClick={handleVerify} disabled={isLoading || otp.length !== 6}>
+                    {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                     {t.auth.verify}
                 </Button>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-2 text-sm text-center text-muted-foreground">
-                <div>
-                    {t.auth.didntReceive}{' '}
-                    <button
-                        onClick={handleResend}
-                        disabled={isResending}
-                        className="hover:text-primary underline underline-offset-4 disabled:opacity-50"
-                    >
-                        {isResending ? t.common.loading : t.auth.resend}
-                    </button>
+            <div className="bg-zinc-50/50 dark:bg-zinc-900/30 p-6 flex flex-col space-y-4 sm:rounded-b-[2rem]">
+                <div className="flex flex-col space-y-3 text-sm text-center font-medium">
+                    <div className="text-zinc-600 dark:text-zinc-400">
+                        {t.auth.didntReceive}{' '}
+                        <button
+                            onClick={handleResend}
+                            disabled={isResending}
+                            className="text-emerald-600 dark:text-emerald-400 hover:underline hover:underline-offset-4 font-semibold disabled:opacity-50 disabled:hover:no-underline transition-all"
+                        >
+                            {isResending ? (
+                                <span className="flex justify-center items-center"><Loader2 className="mr-2 h-3 w-3 animate-spin" /> {t.common.loading}</span>
+                            ) : t.auth.resend}
+                        </button>
+                    </div>
+                    <div className="flex justify-center">
+                        <Link href="/login" className="text-emerald-600 dark:text-emerald-400 hover:underline hover:underline-offset-4 font-semibold">
+                            {t.auth.backToLogin}
+                        </Link>
+                    </div>
                 </div>
-                <div>
-                    <Link href="/login" className="hover:text-primary underline underline-offset-4">
-                        {t.auth.backToLogin}
-                    </Link>
-                </div>
-            </CardFooter>
+            </div>
         </Card>
     );
 }

@@ -13731,3 +13731,270 @@ WHERE users.email = $1::VARCHAR]
 2026-03-02 13:21:42,187 - expense_app - INFO - REQUEST: GET /budgets/progress
 2026-03-02 13:21:42,212 - expense_app - INFO - REQUEST: GET /expenses/
 2026-03-02 13:21:42,730 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5427s
+2026-03-02 13:21:42,765 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.5529s
+2026-03-02 13:40:52,832 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 13:40:52,846 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0137s
+2026-03-02 14:12:40,905 - expense_app - INFO - REQUEST: POST /auth/login
+2026-03-02 14:12:44,781 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 3.8823s
+2026-03-02 14:12:45,344 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:12:45,359 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:12:45,648 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:12:45,654 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:12:47,454 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 1.8058s
+2026-03-02 14:12:47,807 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 2.4486s
+2026-03-02 14:12:47,897 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 2.2430s
+2026-03-02 14:12:47,931 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 2.5878s
+2026-03-02 14:13:47,940 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:13:47,943 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0020s
+2026-03-02 14:23:40,361 - expense_app - INFO - REQUEST: POST /auth/login
+2026-03-02 14:23:41,331 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.9700s
+2026-03-02 14:23:41,751 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:23:41,769 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:23:42,076 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:23:42,079 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:23:42,602 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.8333s
+2026-03-02 14:23:42,622 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5474s
+2026-03-02 14:23:42,901 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.8233s
+2026-03-02 14:23:44,112 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 2.3611s
+2026-03-02 14:23:48,123 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:23:48,672 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5484s
+2026-03-02 14:24:46,070 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:24:46,075 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:24:46,330 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:24:46,469 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.3990s
+2026-03-02 14:24:47,165 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.8342s
+2026-03-02 14:24:47,194 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:24:47,209 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:24:47,603 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.3934s
+2026-03-02 14:24:47,611 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:24:47,991 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.7965s
+2026-03-02 14:24:48,006 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:24:48,175 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5636s
+2026-03-02 14:24:48,330 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 2.2554s
+2026-03-02 14:24:48,338 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:24:48,771 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.7650s
+2026-03-02 14:24:50,554 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 2.2161s
+2026-03-02 14:24:50,558 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:24:52,071 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.5131s
+2026-03-02 14:24:54,366 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:24:54,895 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5287s
+2026-03-02 14:24:56,682 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:24:56,687 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:24:56,991 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:24:57,316 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.6339s
+2026-03-02 14:24:57,330 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.6428s
+2026-03-02 14:24:57,333 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:24:57,352 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:24:58,132 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.7995s
+2026-03-02 14:24:58,651 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.6594s
+2026-03-02 14:24:58,665 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:24:59,008 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 1.6560s
+2026-03-02 14:25:00,087 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4216s
+2026-03-02 14:25:01,981 - expense_app - INFO - REQUEST: GET /expenses/analytics
+2026-03-02 14:25:03,092 - expense_app - INFO - RESPONSE: GET /expenses/analytics Status: 200 Duration: 1.1116s
+2026-03-02 14:25:03,906 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:25:04,437 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5315s
+2026-03-02 14:25:04,444 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:25:04,988 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5436s
+2026-03-02 14:28:31,571 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:28:31,575 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:28:31,577 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:28:31,967 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.3928s
+2026-03-02 14:28:31,977 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:28:32,363 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.7915s
+2026-03-02 14:28:32,372 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:28:32,388 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4103s
+2026-03-02 14:28:33,171 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.5948s
+2026-03-02 14:28:33,176 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:28:33,261 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.8894s
+2026-03-02 14:28:33,408 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:28:33,411 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:28:33,411 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:28:33,846 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4346s
+2026-03-02 14:28:33,957 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5464s
+2026-03-02 14:28:34,186 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.7784s
+2026-03-02 14:28:34,596 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4197s
+2026-03-02 14:28:34,606 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:28:36,248 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.6430s
+2026-03-02 14:28:41,173 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:28:41,480 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:28:42,032 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5515s
+2026-03-02 14:28:42,720 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.5466s
+2026-03-02 14:31:22,783 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:31:22,787 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0047s
+2026-03-02 14:31:32,523 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 14:31:33,104 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 0.5809s
+2026-03-02 14:31:33,485 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:31:33,805 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:31:33,811 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:31:33,825 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:31:34,230 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4192s
+2026-03-02 14:31:34,413 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.6076s
+2026-03-02 14:31:34,425 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.6001s
+2026-03-02 14:31:34,916 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4311s
+2026-03-02 14:31:39,757 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:31:40,540 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.7822s
+2026-03-02 14:31:53,682 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:31:53,685 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:31:54,609 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.9233s
+2026-03-02 14:31:55,148 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4661s
+2026-03-02 14:33:48,522 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:33:48,527 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0050s
+2026-03-02 14:34:38,648 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 14:34:41,780 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 3.1322s
+2026-03-02 14:34:42,845 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:34:43,130 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:34:43,137 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:34:43,170 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:34:43,684 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5528s
+2026-03-02 14:34:43,812 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.6414s
+2026-03-02 14:34:44,013 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.8759s
+2026-03-02 14:34:45,070 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 2.2245s
+2026-03-02 14:34:51,328 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:34:51,909 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5801s
+2026-03-02 14:34:51,919 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:34:52,377 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4575s
+2026-03-02 14:34:55,083 - expense_app - INFO - REQUEST: GET /expenses/analytics
+2026-03-02 14:34:55,848 - expense_app - INFO - RESPONSE: GET /expenses/analytics Status: 200 Duration: 0.7649s
+2026-03-02 14:34:56,611 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:34:57,183 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5709s
+2026-03-02 14:35:05,439 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:35:05,459 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:35:05,687 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:35:06,055 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.5970s
+2026-03-02 14:35:06,063 - expense_app - INFO - REQUEST: GET /incomes/
+2026-03-02 14:35:06,203 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5155s
+2026-03-02 14:35:06,213 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:35:06,615 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4029s
+2026-03-02 14:35:06,635 - expense_app - INFO - RESPONSE: GET /incomes/ Status: 200 Duration: 0.5721s
+2026-03-02 14:35:06,935 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4965s
+2026-03-02 14:35:06,944 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:35:08,348 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4041s
+2026-03-02 14:35:09,837 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:35:10,283 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4459s
+2026-03-02 14:35:10,289 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:35:10,683 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.3931s
+2026-03-02 14:35:14,113 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:35:14,115 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0020s
+2026-03-02 14:35:40,187 - expense_app - INFO - REQUEST: POST /auth/login
+2026-03-02 14:35:41,182 - expense_app - INFO - RESPONSE: POST /auth/login Status: 401 Duration: 0.9952s
+2026-03-02 14:35:47,198 - expense_app - INFO - REQUEST: POST /auth/login
+2026-03-02 14:35:47,854 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.6555s
+2026-03-02 14:35:48,212 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:35:48,519 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:35:48,523 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:35:48,536 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:35:48,970 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4477s
+2026-03-02 14:35:49,130 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.6107s
+2026-03-02 14:35:49,194 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.6579s
+2026-03-02 14:35:49,643 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4305s
+2026-03-02 14:35:58,254 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:35:58,259 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0046s
+2026-03-02 14:37:10,146 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 14:37:10,688 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 0.5424s
+2026-03-02 14:37:11,541 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:37:11,549 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:37:11,870 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:37:12,116 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:37:12,267 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.7173s
+2026-03-02 14:37:12,548 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.6781s
+2026-03-02 14:37:12,887 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.7709s
+2026-03-02 14:37:13,189 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.6476s
+2026-03-02 14:37:31,897 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 14:37:32,162 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2655s
+2026-03-02 14:37:34,549 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:37:35,006 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4562s
+2026-03-02 14:37:35,018 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:37:35,584 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5666s
+2026-03-02 14:37:37,951 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:37:37,964 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:37:38,366 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4009s
+2026-03-02 14:37:38,477 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5255s
+2026-03-02 14:37:40,696 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:37:40,698 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0020s
+2026-03-02 14:37:48,282 - expense_app - INFO - REQUEST: POST /auth/login
+2026-03-02 14:37:49,136 - expense_app - INFO - RESPONSE: POST /auth/login Status: 200 Duration: 0.8556s
+2026-03-02 14:37:49,513 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:37:49,520 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:37:49,827 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:37:49,828 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:37:50,089 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.5702s
+2026-03-02 14:37:50,241 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4142s
+2026-03-02 14:37:50,360 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5324s
+2026-03-02 14:37:51,207 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.6940s
+2026-03-02 14:38:56,946 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 14:38:57,208 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2627s
+2026-03-02 14:39:01,251 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:39:01,672 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4212s
+2026-03-02 14:39:01,686 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:39:02,083 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.3961s
+2026-03-02 14:39:05,886 - expense_app - INFO - REQUEST: GET /expenses/analytics
+2026-03-02 14:39:06,951 - expense_app - INFO - RESPONSE: GET /expenses/analytics Status: 200 Duration: 1.0655s
+2026-03-02 14:42:00,759 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:42:01,280 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5209s
+2026-03-02 14:42:01,288 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:42:01,802 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5147s
+2026-03-02 14:42:03,017 - expense_app - INFO - REQUEST: GET /expenses/analytics
+2026-03-02 14:42:03,745 - expense_app - INFO - RESPONSE: GET /expenses/analytics Status: 200 Duration: 0.7281s
+2026-03-02 14:52:28,077 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 14:52:28,085 - expense_app - INFO - REQUEST: GET /expenses/analytics
+2026-03-02 14:52:28,362 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2842s
+2026-03-02 14:52:28,820 - expense_app - INFO - RESPONSE: GET /expenses/analytics Status: 200 Duration: 0.7336s
+2026-03-02 14:52:33,132 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:52:33,135 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0031s
+2026-03-02 14:52:42,913 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 14:52:43,470 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 0.5574s
+2026-03-02 14:52:43,483 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 14:52:43,740 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2570s
+2026-03-02 14:52:44,607 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:52:44,609 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:52:44,614 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:52:44,649 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:52:45,055 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4455s
+2026-03-02 14:52:45,172 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.5654s
+2026-03-02 14:52:45,258 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.6084s
+2026-03-02 14:52:46,037 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4238s
+2026-03-02 14:52:50,112 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:52:50,114 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0020s
+2026-03-02 14:53:19,073 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 14:53:19,648 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 0.5750s
+2026-03-02 14:53:19,664 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 14:53:19,940 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2759s
+2026-03-02 14:53:20,302 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:53:20,617 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:53:20,621 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:53:20,624 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:53:21,017 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.3952s
+2026-03-02 14:53:21,224 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.6081s
+2026-03-02 14:53:21,422 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.7986s
+2026-03-02 14:53:21,783 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.4814s
+2026-03-02 14:53:32,636 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:53:32,639 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0028s
+2026-03-02 14:53:41,858 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 14:53:42,492 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 0.6338s
+2026-03-02 14:53:42,507 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 14:53:42,759 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2520s
+2026-03-02 14:53:43,131 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 14:53:43,444 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 14:53:43,447 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 14:53:43,454 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 14:53:43,925 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.4809s
+2026-03-02 14:53:44,094 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.6475s
+2026-03-02 14:53:44,164 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.7100s
+2026-03-02 14:53:44,823 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.6925s
+2026-03-02 14:53:48,384 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 14:53:48,385 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0015s
+2026-03-02 15:12:17,972 - expense_app - INFO - REQUEST: POST /auth/google
+2026-03-02 15:12:18,515 - expense_app - INFO - RESPONSE: POST /auth/google Status: 200 Duration: 0.5423s
+2026-03-02 15:12:18,535 - expense_app - INFO - REQUEST: GET /auth/me
+2026-03-02 15:12:18,793 - expense_app - INFO - RESPONSE: GET /auth/me Status: 200 Duration: 0.2582s
+2026-03-02 15:12:19,246 - expense_app - INFO - REQUEST: GET /expenses/summary/monthly
+2026-03-02 15:12:19,253 - expense_app - INFO - REQUEST: GET /expenses/
+2026-03-02 15:12:19,541 - expense_app - INFO - REQUEST: GET /expenses/categories
+2026-03-02 15:12:19,544 - expense_app - INFO - REQUEST: GET /budgets/progress
+2026-03-02 15:12:19,883 - expense_app - INFO - RESPONSE: GET /expenses/ Status: 200 Duration: 0.6301s
+2026-03-02 15:12:20,088 - expense_app - INFO - RESPONSE: GET /expenses/categories Status: 200 Duration: 0.5470s
+2026-03-02 15:12:20,097 - expense_app - INFO - RESPONSE: GET /budgets/progress Status: 200 Duration: 0.5521s
+2026-03-02 15:12:20,758 - expense_app - INFO - RESPONSE: GET /expenses/summary/monthly Status: 200 Duration: 1.5116s
+2026-03-02 15:12:24,481 - expense_app - INFO - REQUEST: POST /auth/logout
+2026-03-02 15:12:24,483 - expense_app - INFO - RESPONSE: POST /auth/logout Status: 200 Duration: 0.0020s

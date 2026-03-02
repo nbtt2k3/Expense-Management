@@ -39,7 +39,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
     const router = useRouter();
-    const { t } = useLanguage();
+    const { t, fetchUserProfile } = useLanguage();
     const [isLoading, setIsLoading] = useState(false);
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
@@ -60,6 +60,7 @@ export default function LoginPage() {
             });
 
             handleLoginSuccess(response.data, values.email);
+            await fetchUserProfile();
             toast.success(t.auth.loginSuccess);
             router.push('/dashboard');
         } catch (error: any) {
@@ -78,6 +79,7 @@ export default function LoginPage() {
                 id_token: response.credential,
             });
             handleLoginSuccess(result.data, '');
+            await fetchUserProfile();
             toast.success(t.auth.googleLoginSuccess);
             router.push('/dashboard');
         } catch (error: any) {
@@ -99,14 +101,14 @@ export default function LoginPage() {
             {googleClientId && (
                 <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
             )}
-            <Card className="w-full">
-                <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">{t.auth.signIn}</CardTitle>
-                    <CardDescription className="text-center">
+            <Card className="w-full border-0 shadow-none bg-transparent sm:bg-white/80 sm:dark:bg-zinc-950/80 sm:backdrop-blur-xl sm:border sm:shadow-2xl sm:shadow-emerald-500/10 sm:rounded-[2rem] overflow-hidden">
+                <CardHeader className="space-y-3 pb-8 pt-6 sm:pt-10">
+                    <CardTitle className="text-3xl font-bold tracking-tight text-center">{t.auth.signIn}</CardTitle>
+                    <CardDescription className="text-center text-base">
                         {t.auth.enterEmail}
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6 sm:px-10 pb-8">
                     {googleClientId && (
                         <>
                             <div
@@ -115,12 +117,12 @@ export default function LoginPage() {
                                 data-callback="handleGoogleCallback"
                                 data-auto_prompt="false"
                             />
-                            <div className="flex justify-center">
+                            <div className="flex justify-center w-full">
                                 <div
                                     className="g_id_signin"
                                     data-type="standard"
                                     data-shape="rectangular"
-                                    data-theme="outline"
+                                    data-theme="filled_black"
                                     data-text="continue_with"
                                     data-size="large"
                                     data-logo_alignment="left"
@@ -129,10 +131,10 @@ export default function LoginPage() {
                             </div>
                             <div className="relative">
                                 <div className="absolute inset-0 flex items-center">
-                                    <span className="w-full border-t" />
+                                    <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
                                 </div>
                                 <div className="relative flex justify-center text-xs uppercase">
-                                    <span className="bg-card px-2 text-muted-foreground">
+                                    <span className="bg-white/80 dark:bg-zinc-950/80 sm:bg-transparent px-2 text-muted-foreground font-medium">
                                         {t.auth.orContinueWith}
                                     </span>
                                 </div>
@@ -141,15 +143,15 @@ export default function LoginPage() {
                     )}
 
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                             <FormField
                                 control={form.control}
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t.auth.email}</FormLabel>
+                                        <FormLabel className="font-semibold">{t.auth.email}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="name@example.com" {...field} disabled={isLoading} />
+                                            <Input className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="name@example.com" {...field} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -160,34 +162,34 @@ export default function LoginPage() {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t.auth.password}</FormLabel>
+                                        <FormLabel className="font-semibold">{t.auth.password}</FormLabel>
                                         <FormControl>
-                                            <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
+                                            <PasswordInput className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="••••••" {...field} disabled={isLoading} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <Button className="w-full" type="submit" disabled={isLoading}>
-                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" type="submit" disabled={isLoading}>
+                                {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                                 {t.auth.signIn}
                             </Button>
                         </form>
                     </Form>
                 </CardContent>
-                <CardFooter className="flex flex-col space-y-2 text-sm text-center text-muted-foreground">
-                    <div>
-                        <Link href="/forgot-password" className="hover:text-primary underline underline-offset-4">
+                <div className="bg-zinc-50/50 dark:bg-zinc-900/30 p-6 flex flex-col space-y-3 sm:rounded-b-[2rem]">
+                    <div className="flex flex-col space-y-2 text-sm text-center font-medium">
+                        <Link href="/forgot-password" className="text-zinc-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                             {t.auth.forgotPassword}
                         </Link>
+                        <div className="text-zinc-500">
+                            {t.auth.noAccount}{' '}
+                            <Link href="/register" className="text-emerald-600 dark:text-emerald-400 hover:underline hover:underline-offset-4 font-semibold">
+                                {t.auth.signUp}
+                            </Link>
+                        </div>
                     </div>
-                    <div>
-                        {t.auth.noAccount}{' '}
-                        <Link href="/register" className="hover:text-primary underline underline-offset-4">
-                            {t.auth.signUp}
-                        </Link>
-                    </div>
-                </CardFooter>
+                </div>
             </Card>
         </>
     );

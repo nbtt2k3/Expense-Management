@@ -77,24 +77,24 @@ export default function RegisterPage() {
     }
 
     return (
-        <Card className="w-full">
-            <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl font-bold text-center">{t.auth.createAccount}</CardTitle>
-                <CardDescription className="text-center">
+        <Card className="w-full border-0 shadow-none bg-transparent sm:bg-white/80 sm:dark:bg-zinc-950/80 sm:backdrop-blur-xl sm:border sm:shadow-2xl sm:shadow-emerald-500/10 sm:rounded-[2rem] overflow-hidden">
+            <CardHeader className="space-y-3 pb-8 pt-6 sm:pt-10">
+                <CardTitle className="text-3xl font-bold tracking-tight text-center">{t.auth.createAccount}</CardTitle>
+                <CardDescription className="text-center text-base">
                     {t.auth.getStarted}
                 </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6 sm:px-10 pb-8">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                         <FormField
                             control={form.control}
                             name="full_name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t.auth.fullName}</FormLabel>
+                                    <FormLabel className="font-semibold">{t.auth.fullName}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="John Doe" {...field} disabled={isLoading} />
+                                        <Input className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="John Doe" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -105,9 +105,9 @@ export default function RegisterPage() {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t.auth.email}</FormLabel>
+                                    <FormLabel className="font-semibold">{t.auth.email}</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="name@example.com" {...field} disabled={isLoading} />
+                                        <Input className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="name@example.com" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -118,9 +118,9 @@ export default function RegisterPage() {
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t.auth.password}</FormLabel>
+                                    <FormLabel className="font-semibold">{t.auth.password}</FormLabel>
                                     <FormControl>
-                                        <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
+                                        <PasswordInput className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="••••••" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -131,29 +131,31 @@ export default function RegisterPage() {
                             name="confirmPassword"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t.auth.confirmPassword}</FormLabel>
+                                    <FormLabel className="font-semibold">{t.auth.confirmPassword}</FormLabel>
                                     <FormControl>
-                                        <PasswordInput placeholder="••••••" {...field} disabled={isLoading} />
+                                        <PasswordInput className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="••••••" {...field} disabled={isLoading} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button className="w-full" type="submit" disabled={isLoading}>
-                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" type="submit" disabled={isLoading}>
+                            {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
                             {t.auth.signUp}
                         </Button>
                     </form>
                 </Form>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-2 text-sm text-center text-muted-foreground">
-                <div>
-                    {t.auth.hasAccount}{' '}
-                    <Link href="/login" className="hover:text-primary underline underline-offset-4">
-                        {t.auth.signIn}
-                    </Link>
+            <div className="bg-zinc-50/50 dark:bg-zinc-900/30 p-6 flex flex-col space-y-3 sm:rounded-b-[2rem]">
+                <div className="flex flex-col space-y-2 text-sm text-center font-medium">
+                    <div className="text-zinc-500">
+                        {t.auth.hasAccount}{' '}
+                        <Link href="/login" className="text-emerald-600 dark:text-emerald-400 hover:underline hover:underline-offset-4 font-semibold">
+                            {t.auth.signIn}
+                        </Link>
+                    </div>
                 </div>
-            </CardFooter>
+            </div>
         </Card>
     );
 }
