@@ -26,7 +26,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
@@ -123,19 +122,21 @@ export default function ForgotPasswordPage() {
     }
 
     return (
-        <Card className="w-full border-0 shadow-none bg-transparent sm:bg-white/80 sm:dark:bg-zinc-950/80 sm:backdrop-blur-xl sm:border sm:shadow-2xl sm:shadow-emerald-500/10 sm:rounded-[2rem] overflow-hidden">
-            <CardHeader className="space-y-3 pb-8 pt-6 sm:pt-10">
-                <CardTitle className="text-3xl font-bold tracking-tight text-center">
+        <Card className="w-full border-0 sm:border border-zinc-200/50 dark:border-zinc-800/50 shadow-none sm:shadow-xl sm:shadow-emerald-500/5 bg-transparent sm:bg-white/90 sm:dark:bg-zinc-950/90 sm:backdrop-blur-xl sm:rounded-3xl overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
+
+            <CardHeader className="space-y-2 pb-6 pt-8 sm:pt-10 px-6 sm:px-10 relative z-10">
+                <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight text-center text-zinc-900 dark:text-zinc-50">
                     {step === 'done' ? t.auth.success : t.auth.resetPassword}
                 </CardTitle>
-                <CardDescription className="text-center text-base">
+                <CardDescription className="text-center text-zinc-500 dark:text-zinc-400">
                     {step === 'email' && t.auth.enterEmailReset}
                     {step === 'otp' && `${t.auth.enterCode} ${email}`}
                     {step === 'reset' && t.auth.enterNewPassword}
                     {step === 'done' && t.auth.passwordResetDone}
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6 sm:px-10 pb-8">
+            <CardContent className="space-y-6 px-6 sm:px-10 pb-8 relative z-10">
                 {step === 'email' && (
                     <Form {...emailForm}>
                         <form onSubmit={emailForm.handleSubmit(onSendOTP)} className="space-y-5">
@@ -144,16 +145,20 @@ export default function ForgotPasswordPage() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="font-semibold">{t.auth.email}</FormLabel>
+                                        <FormLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">{t.auth.email}</FormLabel>
                                         <FormControl>
-                                            <Input className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="name@example.com" {...field} disabled={isLoading} />
+                                            <Input className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-emerald-500 rounded-xl transition-all" placeholder="name@example.com" {...field} disabled={isLoading} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="text-xs" />
                                     </FormItem>
                                 )}
                             />
-                            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" type="submit" disabled={isLoading}>
-                                {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                            <Button
+                                className="w-full h-12 text-sm font-semibold rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-900 text-white shadow-md hover:shadow-lg transition-all duration-200"
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 {t.auth.sendCode}
                             </Button>
                         </form>
@@ -168,16 +173,20 @@ export default function ForgotPasswordPage() {
                                 name="otp"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="font-semibold">{t.auth.verificationCode}</FormLabel>
+                                        <FormLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">{t.auth.verificationCode}</FormLabel>
                                         <FormControl>
-                                            <Input className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl text-center tracking-widest text-lg font-mono" placeholder="123456" maxLength={6} {...field} disabled={isLoading} />
+                                            <Input className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-emerald-500 rounded-xl text-center tracking-widest text-lg font-mono transition-all" placeholder="123456" maxLength={6} {...field} disabled={isLoading} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="text-xs" />
                                     </FormItem>
                                 )}
                             />
-                            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" type="submit" disabled={isLoading}>
-                                {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                            <Button
+                                className="w-full h-12 text-sm font-semibold rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-900 text-white shadow-md hover:shadow-lg transition-all duration-200"
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 {t.auth.verifyCode}
                             </Button>
                         </form>
@@ -192,11 +201,11 @@ export default function ForgotPasswordPage() {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="font-semibold">{t.auth.newPassword}</FormLabel>
+                                        <FormLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">{t.auth.newPassword}</FormLabel>
                                         <FormControl>
-                                            <PasswordInput className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="••••••" {...field} disabled={isLoading} />
+                                            <PasswordInput className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-emerald-500 rounded-xl transition-all" placeholder="••••••" autoComplete="new-password" {...field} disabled={isLoading} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="text-xs" />
                                     </FormItem>
                                 )}
                             />
@@ -205,16 +214,20 @@ export default function ForgotPasswordPage() {
                                 name="confirmPassword"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="font-semibold">{t.auth.confirmPassword}</FormLabel>
+                                        <FormLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">{t.auth.confirmPassword}</FormLabel>
                                         <FormControl>
-                                            <PasswordInput className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="••••••" {...field} disabled={isLoading} />
+                                            <PasswordInput className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-emerald-500 rounded-xl transition-all" placeholder="••••••" autoComplete="new-password" {...field} disabled={isLoading} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormMessage className="text-xs" />
                                     </FormItem>
                                 )}
                             />
-                            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" type="submit" disabled={isLoading}>
-                                {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+                            <Button
+                                className="w-full h-12 text-sm font-semibold rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-900 text-white shadow-md hover:shadow-lg transition-all duration-200"
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 {t.auth.resetPassword}
                             </Button>
                         </form>
@@ -223,19 +236,22 @@ export default function ForgotPasswordPage() {
 
                 {step === 'done' && (
                     <div className="text-center space-y-5">
-                        <p className="text-base text-zinc-500 dark:text-zinc-400">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
                             {t.auth.canSignIn}
                         </p>
-                        <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" onClick={() => router.push('/login')}>
+                        <Button
+                            className="w-full h-12 text-sm font-semibold rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-900 text-white shadow-md hover:shadow-lg transition-all duration-200"
+                            onClick={() => router.push('/login')}
+                        >
                             {t.auth.goToSignIn}
                         </Button>
                     </div>
                 )}
             </CardContent>
             {step !== 'done' && (
-                <div className="bg-zinc-50/50 dark:bg-zinc-900/30 p-6 flex flex-col space-y-3 sm:rounded-b-[2rem]">
+                <div className="bg-zinc-50/50 dark:bg-zinc-900/20 px-6 sm:px-10 py-6 border-t border-zinc-100 dark:border-zinc-800/50 relative z-10 flex flex-col space-y-3">
                     <div className="flex justify-center text-sm font-medium">
-                        <Link href="/login" className="text-emerald-600 dark:text-emerald-400 hover:underline hover:underline-offset-4 font-semibold">
+                        <Link href="/login" className="text-zinc-900 dark:text-white font-semibold hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                             {t.auth.backToLogin}
                         </Link>
                     </div>

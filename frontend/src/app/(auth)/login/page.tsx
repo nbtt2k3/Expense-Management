@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Script from 'next/script';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -12,6 +11,7 @@ import { toast } from 'sonner';
 
 import api, { handleLoginSuccess } from '@/lib/api';
 import { useLanguage } from '@/i18n/LanguageContext';
+import { GoogleLoginButton } from '@/components/auth/GoogleLoginButton';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,7 +27,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
@@ -72,7 +71,7 @@ export default function LoginPage() {
         }
     }
 
-    async function handleGoogleCallback(response: any) {
+    async function handleGoogleSuccess(response: any) {
         setIsGoogleLoading(true);
         try {
             const result = await api.post('/auth/google', {
@@ -85,112 +84,102 @@ export default function LoginPage() {
         } catch (error: any) {
             console.error(error);
             toast.error(t.auth.googleLoginFailed);
-        } finally {
-            setIsGoogleLoading(false);
+            setIsGoogleLoading(false); // Only set false on error, if success it redirects
         }
     }
 
-    if (typeof window !== 'undefined') {
-        (window as any).handleGoogleCallback = handleGoogleCallback;
-    }
-
-    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-
     return (
-        <>
-            {googleClientId && (
-                <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" />
-            )}
-            <Card className="w-full border-0 shadow-none bg-transparent sm:bg-white/80 sm:dark:bg-zinc-950/80 sm:backdrop-blur-xl sm:border sm:shadow-2xl sm:shadow-emerald-500/10 sm:rounded-[2rem] overflow-hidden">
-                <CardHeader className="space-y-3 pb-8 pt-6 sm:pt-10">
-                    <CardTitle className="text-3xl font-bold tracking-tight text-center">{t.auth.signIn}</CardTitle>
-                    <CardDescription className="text-center text-base">
-                        {t.auth.enterEmail}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6 sm:px-10 pb-8">
-                    {googleClientId && (
-                        <>
-                            <div
-                                id="g_id_onload"
-                                data-client_id={googleClientId}
-                                data-callback="handleGoogleCallback"
-                                data-auto_prompt="false"
-                            />
-                            <div className="flex justify-center w-full">
-                                <div
-                                    className="g_id_signin"
-                                    data-type="standard"
-                                    data-shape="rectangular"
-                                    data-theme="filled_black"
-                                    data-text="continue_with"
-                                    data-size="large"
-                                    data-logo_alignment="left"
-                                    data-width="350"
-                                />
-                            </div>
-                            <div className="relative">
-                                <div className="absolute inset-0 flex items-center">
-                                    <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
-                                </div>
-                                <div className="relative flex justify-center text-xs uppercase">
-                                    <span className="bg-white/80 dark:bg-zinc-950/80 sm:bg-transparent px-2 text-muted-foreground font-medium">
-                                        {t.auth.orContinueWith}
-                                    </span>
-                                </div>
-                            </div>
-                        </>
-                    )}
+        <Card className="w-full border-0 sm:border border-zinc-200/50 dark:border-zinc-800/50 shadow-none sm:shadow-xl sm:shadow-emerald-500/5 bg-transparent sm:bg-white/90 sm:dark:bg-zinc-950/90 sm:backdrop-blur-xl sm:rounded-3xl overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent pointer-events-none" />
 
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="font-semibold">{t.auth.email}</FormLabel>
-                                        <FormControl>
-                                            <Input className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="name@example.com" {...field} disabled={isLoading} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="font-semibold">{t.auth.password}</FormLabel>
-                                        <FormControl>
-                                            <PasswordInput className="h-12 bg-white/50 dark:bg-zinc-900/50 focus-visible:ring-emerald-500 rounded-xl" placeholder="••••••" {...field} disabled={isLoading} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button className="w-full h-12 text-base font-semibold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200" type="submit" disabled={isLoading}>
-                                {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
-                                {t.auth.signIn}
-                            </Button>
-                        </form>
-                    </Form>
-                </CardContent>
-                <div className="bg-zinc-50/50 dark:bg-zinc-900/30 p-6 flex flex-col space-y-3 sm:rounded-b-[2rem]">
-                    <div className="flex flex-col space-y-2 text-sm text-center font-medium">
-                        <Link href="/forgot-password" className="text-zinc-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                            {t.auth.forgotPassword}
+            <CardHeader className="space-y-2 pb-6 pt-8 sm:pt-10 px-6 sm:px-10 relative z-10">
+                <CardTitle className="text-2xl sm:text-3xl font-bold tracking-tight text-center text-zinc-900 dark:text-zinc-50">
+                    {t.auth.signIn}
+                </CardTitle>
+                <CardDescription className="text-center text-zinc-500 dark:text-zinc-400">
+                    {t.auth.enterEmail}
+                </CardDescription>
+            </CardHeader>
+
+            <CardContent className="space-y-6 px-6 sm:px-10 pb-8 relative z-10">
+                <GoogleLoginButton
+                    onSuccess={handleGoogleSuccess}
+                    disabled={isLoading || isGoogleLoading}
+                />
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                                        {t.auth.email}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-emerald-500 rounded-xl transition-all"
+                                            placeholder="name@example.com"
+                                            {...field}
+                                            disabled={isLoading || isGoogleLoading}
+                                        />
+                                    </FormControl>
+                                    <FormMessage className="text-xs" />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                                        {t.auth.password}
+                                    </FormLabel>
+                                    <FormControl>
+                                        <PasswordInput
+                                            className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus-visible:ring-emerald-500 rounded-xl transition-all"
+                                            placeholder="••••••"
+                                            {...field}
+                                            disabled={isLoading || isGoogleLoading}
+                                        />
+                                    </FormControl>
+                                    <FormMessage className="text-xs" />
+                                </FormItem>
+                            )}
+                        />
+                        <Button
+                            className="w-full h-12 text-sm font-semibold rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-900 text-white shadow-md hover:shadow-lg transition-all duration-200"
+                            type="submit"
+                            disabled={isLoading || isGoogleLoading}
+                        >
+                            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            {!isLoading && isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t.auth.signIn}
+                        </Button>
+                    </form>
+                </Form>
+            </CardContent>
+
+            <div className="bg-zinc-50/50 dark:bg-zinc-900/20 px-6 sm:px-10 py-6 border-t border-zinc-100 dark:border-zinc-800/50 relative z-10 flex flex-col space-y-3">
+                <div className="flex flex-col space-y-3 text-sm text-center">
+                    <Link
+                        href="/forgot-password"
+                        className="text-zinc-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors font-medium"
+                    >
+                        {t.auth.forgotPassword}
+                    </Link>
+                    <div className="text-zinc-500">
+                        {t.auth.noAccount}{' '}
+                        <Link
+                            href="/register"
+                            className="text-zinc-900 dark:text-white font-semibold hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                        >
+                            {t.auth.signUp}
                         </Link>
-                        <div className="text-zinc-500">
-                            {t.auth.noAccount}{' '}
-                            <Link href="/register" className="text-emerald-600 dark:text-emerald-400 hover:underline hover:underline-offset-4 font-semibold">
-                                {t.auth.signUp}
-                            </Link>
-                        </div>
                     </div>
                 </div>
-            </Card>
-        </>
+            </div>
+        </Card>
     );
 }

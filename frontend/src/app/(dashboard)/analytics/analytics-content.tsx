@@ -11,7 +11,7 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
     TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight,
-    Lightbulb, Award, AlertTriangle, Minus, Download
+    Lightbulb, Award, AlertTriangle, Minus, Download, BarChart3, LayoutList, PieChart as PieChartLucide
 } from 'lucide-react';
 import { expenseApi } from '@/lib/api';
 import Loading from './loading';
@@ -53,12 +53,12 @@ const CustomBarTooltip = ({ active, payload, label, formatCurrency }: any) => {
                 <p className="font-bold text-zinc-700 dark:text-zinc-300 mb-2 text-sm">{label}</p>
                 {payload.map((entry: any, i: number) => (
                     <p key={i} className="font-medium mb-1" style={{ color: entry.fill }}>
-                        {entry.name}: {formatCurrency(Number(entry.value)).replace('â‚«', '').trim()} Ä‘
+                        {entry.name}: {formatCurrency(Number(entry.value)).replace('₫', '').trim()} đ
                     </p>
                 ))}
                 <div className="border-t border-zinc-100 dark:border-zinc-700 mt-2 pt-2">
                     <p className={`font-bold ${savings >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
-                        Net: {savings >= 0 ? '+' : ''}{formatCurrency(savings).replace('â‚«', '').trim()} Ä‘
+                        Net: {savings >= 0 ? '+' : ''}{formatCurrency(savings).replace('₫', '').trim()} đ
                     </p>
                 </div>
             </div>
@@ -73,7 +73,7 @@ const CustomPieTooltip = ({ active, payload, formatCurrency }: any) => {
         return (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl p-3 shadow-xl text-xs">
                 <p className="font-bold text-zinc-700 dark:text-zinc-200 mb-1">{name}</p>
-                <p className="text-zinc-500">{formatCurrency(Number(value)).replace('â‚«', '').trim()} Ä‘</p>
+                <p className="text-zinc-500">{formatCurrency(Number(value)).replace('₫', '').trim()} đ</p>
                 <p className="font-semibold text-zinc-700 dark:text-zinc-200">{p.percentage}%</p>
             </div>
         );
@@ -287,8 +287,10 @@ export function AnalyticsContent() {
                     </div>
                 </div>
             ) : !hasData ? (
-                <div className="text-center p-20 bg-white dark:bg-zinc-950 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800">
-                    <p className="text-4xl mb-3">ðŸ“Š</p>
+                <div className="text-center p-20 bg-white dark:bg-zinc-950 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center">
+                    <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-900 rounded-full flex items-center justify-center mb-4 shadow-sm">
+                        <BarChart3 className="w-8 h-8 text-zinc-400 dark:text-zinc-500" strokeWidth={1.5} />
+                    </div>
                     <p className="text-zinc-500 font-medium">{t.analytics.noData} {selectedYear}</p>
                     <p className="text-zinc-400 text-sm mt-1">{t.analytics.noDataSub}</p>
                 </div>
@@ -384,7 +386,7 @@ export function AnalyticsContent() {
                             {categoryData.length === 0 ? (
                                 <div className="h-[260px] flex flex-col items-center justify-center text-center text-sm text-zinc-400 p-6 bg-slate-50/50 dark:bg-zinc-900/30 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 mt-2">
                                     <div className="w-12 h-12 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center mb-3 shadow-sm">
-                                        <span className="text-xl">ðŸ©</span>
+                                        <PieChartLucide className="w-6 h-6 text-zinc-400 dark:text-zinc-500" />
                                     </div>
                                     <p className="font-semibold text-zinc-700 dark:text-zinc-300 mb-1">{t.analytics.noCategoryData}</p>
                                     <p className="text-xs max-w-xs">{t.analytics.noCategoryDataSub}</p>
@@ -469,7 +471,7 @@ export function AnalyticsContent() {
                             {categoryData.length === 0 ? (
                                 <div className="h-48 flex flex-col items-center justify-center text-center text-sm text-zinc-400 p-6 bg-slate-50/50 dark:bg-zinc-900/30 rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 mt-2">
                                     <div className="w-12 h-12 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center mb-3 shadow-sm">
-                                        <span className="text-xl">ðŸ·ï¸</span>
+                                        <LayoutList className="w-6 h-6 text-zinc-400 dark:text-zinc-500" />
                                     </div>
                                     <p className="font-semibold text-zinc-700 dark:text-zinc-300 mb-1">{t.analytics.noCategoryBreakdown}</p>
                                 </div>
@@ -559,7 +561,7 @@ export function AnalyticsContent() {
                                             iconColor="text-rose-400"
                                             bg="bg-rose-50 dark:bg-rose-900/10"
                                             title={t.analytics.highestSpending.replace('{month}', metrics.monthLabel(metrics.peakExpense.month))}
-                                            description={t.analytics.highestSpendingDesc.replace('{amount}', `${formatCurrency(metrics.peakExpense.expense).replace('â‚«', '').trim()} Ä‘`)}
+                                            description={t.analytics.highestSpendingDesc.replace('{amount}', `${formatCurrency(metrics.peakExpense.expense).replace('₫', '').trim()} đ`)}
                                         />
                                     )}
 
@@ -573,7 +575,7 @@ export function AnalyticsContent() {
                                             description={t.analytics.topExpenseDesc
                                                 .replace('{category}', translateCategoryName(topCategory.category_name))
                                                 .replace('{percent}', topCategory.percentage.toFixed(1))
-                                                .replace('{amount}', `${formatCurrency(topCategory.total_amount).replace('â‚«', '').trim()} Ä‘`)}
+                                                .replace('{amount}', `${formatCurrency(topCategory.total_amount).replace('₫', '').trim()} đ`)}
                                         />
                                     )}
 
@@ -584,7 +586,7 @@ export function AnalyticsContent() {
                                             iconColor="text-emerald-500"
                                             bg="bg-emerald-50 dark:bg-emerald-900/10"
                                             title={t.analytics.bestMonth.replace('{month}', metrics.monthLabel(metrics.bestMonth.month))}
-                                            description={t.analytics.bestMonthDesc.replace('{amount}', `${formatCurrency(metrics.bestMonth.income - metrics.bestMonth.expense).replace('â‚«', '').trim()} Ä‘`)}
+                                            description={t.analytics.bestMonthDesc.replace('{amount}', `${formatCurrency(metrics.bestMonth.income - metrics.bestMonth.expense).replace('₫', '').trim()} đ`)}
                                         />
                                     )}
                                 </div>
