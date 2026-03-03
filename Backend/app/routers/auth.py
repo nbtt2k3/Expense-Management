@@ -277,7 +277,10 @@ async def google_login(data: GoogleAuth, db: AsyncSession = Depends(get_db)):
             google_requests.Request(),
             settings.GOOGLE_CLIENT_ID,
         )
-    except Exception:
+    except Exception as e:
+        import logging
+        logger = logging.getLogger("expense_app")
+        logger.error(f"Google Token Verification Failed: {e}")
         raise HTTPException(status_code=401, detail="Invalid Google token")
 
     email = idinfo.get("email")
